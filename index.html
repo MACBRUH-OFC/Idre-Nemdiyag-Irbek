@@ -1,1089 +1,1237 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-<title>IDRE NEMDIYAAG IRBEK</title>
-
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
-
-<style>
-*{
-    margin:0;
-    padding:0;
-    box-sizing:border-box;
-    user-select:none;
-    -webkit-tap-highlight-color:transparent;
-}
-
-body{
-    overflow:hidden;
-    font-family:Segoe UI,sans-serif;
-    background:#000;
-}
-
-#game{
-    position:relative;
-    width:100vw;
-    height:100vh;
-    overflow:hidden;
-    background:linear-gradient(to bottom,#56ccf2,#2f80ed);
-}
-
-/* SKY */
-
-#sky{
-    position:absolute;
-    inset:0;
-    overflow:hidden;
-}
-
-.cloud{
-    position:absolute;
-    background:rgba(255,255,255,.8);
-    border-radius:100px;
-}
-
-.cloud::before,
-.cloud::after{
-    content:'';
-    position:absolute;
-    background:rgba(255,255,255,.8);
-    border-radius:50%;
-}
-
-.cloud::before{
-    width:50px;
-    height:50px;
-    top:-25px;
-    left:15px;
-}
-
-.cloud::after{
-    width:40px;
-    height:40px;
-    top:-15px;
-    right:15px;
-}
-
-/* GROUND */
-
-#ground{
-    position:absolute;
-    bottom:0;
-    width:100%;
-    height:100px;
-    background:
-        linear-gradient(to bottom,#59c173,#2d8f47);
-    border-top:4px solid #1f6d35;
-    z-index:5;
-}
-
-/* CHARACTER */
-
-#player{
-    position:absolute;
-    width:82px;
-    height:82px;
-    z-index:50;
-    background-size:contain;
-    background-repeat:no-repeat;
-    background-position:center;
-    transition:transform .08s linear;
-}
-
-/* HUD */
-
-#hud{
-    position:absolute;
-    top:0;
-    width:100%;
-    padding:14px;
-    z-index:200;
-}
-
-#topbar{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    padding:12px 18px;
-    border-radius:20px;
-    background:rgba(0,0,0,.28);
-    backdrop-filter:blur(10px);
-    color:white;
-}
-
-.hud-box{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-weight:700;
-    font-size:18px;
-}
-
-#difficulty{
-    width:130px;
-    height:10px;
-    border-radius:20px;
-    background:rgba(255,255,255,.2);
-    overflow:hidden;
-}
-
-#difficulty-fill{
-    height:100%;
-    width:0%;
-    border-radius:20px;
-    background:linear-gradient(to right,#4caf50,#ff9800,#f44336);
-}
-
-/* BUTTONS */
-
-.icon-btn{
-    width:42px;
-    height:42px;
-    border-radius:50%;
-    border:none;
-    background:rgba(255,255,255,.18);
-    color:white;
-    font-size:17px;
-}
-
-.icon-btn:active{
-    transform:scale(.92);
-}
-
-/* OBSTACLES */
-
-.pipe{
-    position:absolute;
-    width:88px;
-    z-index:20;
-    overflow:hidden;
-    border-radius:16px;
-    background:rgba(255,255,255,.08);
-    border:2px solid rgba(255,255,255,.12);
-}
-
-.pipe-stack{
-    width:100%;
-    height:100%;
-    background-image:url('https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/TV9Logo.webp');
-    background-size:72px;
-    background-repeat:repeat-y;
-    background-position:center;
-}
-
-/* COINS */
-
-.coin{
-    position:absolute;
-    width:58px;
-    height:58px;
-    background-size:contain;
-    background-repeat:no-repeat;
-    background-position:center;
-    z-index:30;
-    animation:floatCoin 1s infinite ease-in-out;
-}
-
-@keyframes floatCoin{
-    0%,100%{
-        transform:translateY(0px);
-    }
-    50%{
-        transform:translateY(-6px);
-    }
-}
-
-/* START MENU */
-
-.overlay{
-    position:absolute;
-    inset:0;
-    background:rgba(0,0,0,.45);
-    backdrop-filter:blur(6px);
-    z-index:500;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-
-.card{
-    width:90%;
-    max-width:400px;
-    padding:30px;
-    border-radius:28px;
-    background:rgba(255,255,255,.12);
-    backdrop-filter:blur(20px);
-    text-align:center;
-    color:white;
-    border:1px solid rgba(255,255,255,.15);
-}
-
-.title{
-    font-size:38px;
-    font-weight:900;
-    margin-bottom:8px;
-    background:linear-gradient(to right,#ff9966,#ff5e62);
-    -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent;
-}
-
-.subtitle{
-    opacity:.85;
-    margin-bottom:24px;
-}
-
-.big-btn{
-    width:100%;
-    padding:16px;
-    border:none;
-    border-radius:18px;
-    margin-top:12px;
-    font-size:18px;
-    font-weight:800;
-    color:white;
-    background:linear-gradient(to right,#ff512f,#dd2476);
-}
-
-.big-btn:active{
-    transform:scale(.97);
-}
-
-#tap-text{
-    position:absolute;
-    bottom:120px;
-    width:100%;
-    text-align:center;
-    color:white;
-    font-size:20px;
-    font-weight:700;
-    z-index:100;
-    text-shadow:0 2px 8px rgba(0,0,0,.5);
-    animation:pulse 1.3s infinite;
-}
-
-@keyframes pulse{
-    0%,100%{
-        opacity:1;
-    }
-    50%{
-        opacity:.5;
-    }
-}
-
-/* GAME OVER */
-
-#gameover{
-    display:none;
-}
-
-.stats{
-    margin-top:20px;
-    display:flex;
-    justify-content:space-around;
-}
-
-.stat-number{
-    font-size:30px;
-    font-weight:900;
-}
-
-/* PARTICLES */
-
-.particle{
-    position:absolute;
-    border-radius:50%;
-    pointer-events:none;
-    z-index:90;
-}
-
-/* RESPONSIVE */
-
-@media(max-width:450px){
-
-    #player{
-        width:74px;
-        height:74px;
-    }
-
-    .pipe{
-        width:78px;
-    }
-
-}
-</style>
-</head>
-
-<body>
-
-<div id="game">
-
-    <div id="sky"></div>
-
-    <div id="ground"></div>
-
-    <div id="player"></div>
-
-    <div id="hud">
-
-        <div id="topbar">
-
-            <div class="hud-box">
-                <i class="fas fa-star"></i>
-                <span id="score">0</span>
-            </div>
-
-            <div class="hud-box">
-                <span>Difficulty</span>
-
-                <div id="difficulty">
-                    <div id="difficulty-fill"></div>
-                </div>
-            </div>
-
-            <button id="pauseBtn" class="icon-btn">
-                <i class="fas fa-pause"></i>
-            </button>
-
-        </div>
-
-    </div>
-
-    <div id="tap-text">
-        TAP TO FLY
-    </div>
-
-    <!-- START -->
-
-    <div id="startMenu" class="overlay">
-
-        <div class="card">
-
-            <div class="title">
-                IDRE NEMDIYAAG IRBEK
-            </div>
-
-            <div class="subtitle">
-                Smooth gameplay • Better gravity • Balanced difficulty
-            </div>
-
-            <button id="startBtn" class="big-btn">
-                <i class="fas fa-play"></i>
-                START GAME
-            </button>
-
-        </div>
-
-    </div>
-
-    <!-- GAME OVER -->
-
-    <div id="gameover" class="overlay">
-
-        <div class="card">
-
-            <div class="title">
-                GAME OVER
-            </div>
-
-            <div class="stats">
-
-                <div>
-                    <div>Score</div>
-                    <div class="stat-number" id="finalScore">0</div>
-                </div>
-
-                <div>
-                    <div>Best</div>
-                    <div class="stat-number" id="bestScore">0</div>
-                </div>
-
-            </div>
-
-            <button id="restartBtn" class="big-btn">
-                PLAY AGAIN
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-<!-- AUDIO -->
-
-<audio id="flapAudio">
-<source src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/main/Resources/Audio/Flap.mp3">
-</audio>
-
-<audio id="pointAudio">
-<source src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/main/Resources/Audio/Point.mp3">
-</audio>
-
-<audio id="overAudio">
-<source src="https://github.com/MACBRUH-OFC/-Simulator/blob/main/Resources/Audio/GameOverSound.mp3?raw=true">
-</audio>
-
-<script>
-
-/* =========================
-   GAME CONFIG
-========================= */
-
-const GAME = {
-
-    gravity:0.34,
-    jump:-7.8,
-    terminal:9,
-
-    pipeGap:270,
-    minPipeGap:220,
-
-    pipeWidth:88,
-
-    speed:3.2,
-
-    spawnTime:1700
-
-};
-
-/* =========================
-   ELEMENTS
-========================= */
-
-const player = document.getElementById("player");
-const game = document.getElementById("game");
-
-const scoreText = document.getElementById("score");
-const finalScore = document.getElementById("finalScore");
-const bestScoreText = document.getElementById("bestScore");
-
-const difficultyFill = document.getElementById("difficulty-fill");
-
-const startMenu = document.getElementById("startMenu");
-const gameover = document.getElementById("gameover");
-
-const flapAudio = document.getElementById("flapAudio");
-const pointAudio = document.getElementById("pointAudio");
-const overAudio = document.getElementById("overAudio");
-
-/* =========================
-   PLAYER IMAGE
-========================= */
-
-player.style.backgroundImage =
-"url('https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/DFace.png')";
-
-/* =========================
-   GAME STATE
-========================= */
-
-let playing = false;
-
-let playerY = 250;
-let velocity = 0;
-
-let pipes = [];
-let coins = [];
-
-let score = 0;
-
-let best = localStorage.getItem("bestScoreDarshan") || 0;
-
-let lastSpawn = 0;
-
-let difficulty = 0;
-
-let animation;
-
-/* =========================
-   INIT
-========================= */
-
-bestScoreText.innerText = best;
-
-createClouds();
-
-updatePlayer();
-
-/* =========================
-   CONTROLS
-========================= */
-
-document.getElementById("startBtn").onclick = startGame;
-document.getElementById("restartBtn").onclick = restartGame;
-
-game.addEventListener("click", flap);
-document.addEventListener("keydown", e=>{
-
-    if(e.code === "Space"){
-        e.preventDefault();
-        flap();
-    }
-
-});
-
-/* =========================
-   START GAME
-========================= */
-
-function startGame(){
-
-    startMenu.style.display = "none";
-    gameover.style.display = "none";
-
-    resetGame();
-
-    playing = true;
-
-    animation = requestAnimationFrame(loop);
-
-}
-
-/* =========================
-   RESET
-========================= */
-
-function resetGame(){
-
-    pipes.forEach(p=>{
-        p.top.remove();
-        p.bottom.remove();
-    });
-
-    coins.forEach(c=>c.el.remove());
-
-    pipes = [];
-    coins = [];
-
-    score = 0;
-    difficulty = 0;
-
-    updateScore();
-
-    playerY = window.innerHeight/2;
-
-    velocity = 0;
-
-    updatePlayer();
-
-}
-
-/* =========================
-   FLAP
-========================= */
-
-function flap(){
-
-    if(!playing) return;
-
-    velocity = GAME.jump;
-
-    flapAudio.currentTime = 0;
-    flapAudio.play();
-
-    createParticles(
-        player.offsetLeft+40,
-        playerY+40
-    );
-
-}
-
-/* =========================
-   LOOP
-========================= */
-
-function loop(){
-
-    updatePhysics();
-
-    updatePipes();
-
-    updateCoins();
-
-    detectCollision();
-
-    animation = requestAnimationFrame(loop);
-
-}
-
-/* =========================
-   PHYSICS
-========================= */
-
-function updatePhysics(){
-
-    velocity += GAME.gravity;
-
-    if(velocity > GAME.terminal){
-        velocity = GAME.terminal;
-    }
-
-    playerY += velocity;
-
-    if(playerY < 0){
-        playerY = 0;
-        velocity = 0;
-    }
-
-    const groundY =
-    window.innerHeight - 100 - player.clientHeight;
-
-    if(playerY >= groundY){
-
-        playerY = groundY;
-
-        endGame();
-
-    }
-
-    player.style.transform =
-    `rotate(${velocity * 4}deg)`;
-
-    updatePlayer();
-
-}
-
-/* =========================
-   UPDATE PLAYER
-========================= */
-
-function updatePlayer(){
-
-    player.style.left = "22vw";
-    player.style.top = playerY + "px";
-
-}
-
-/* =========================
-   PIPES
-========================= */
-
-function updatePipes(){
-
-    const now = Date.now();
-
-    if(now - lastSpawn > GAME.spawnTime){
-
-        spawnPipe();
-
-        lastSpawn = now;
-
-    }
-
-    pipes.forEach((pipe,index)=>{
-
-        pipe.x -= GAME.speed;
-
-        pipe.top.style.left = pipe.x + "px";
-        pipe.bottom.style.left = pipe.x + "px";
-
-        if(!pipe.passed &&
-            pipe.x < window.innerWidth * .22){
-
-            pipe.passed = true;
-
-            score++;
-
-            updateScore();
-
-            pointAudio.currentTime = 0;
-            pointAudio.play();
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>IDRE NEMDIYAAG IRBEK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            user-select: none; 
+            -webkit-tap-highlight-color: transparent; 
+        } 
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #1a2a6c, #b21f1f, #fdbb2d); 
+            color: white; 
+            overflow: hidden; 
+            height: 100vh; 
+            width: 100vw; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            touch-action: manipulation; 
+        } 
+        #game-container { 
+            position: relative; 
+            width: 100vw; 
+            height: 100vh; 
+            background: linear-gradient(to bottom, #4facfe 0%, #00f2fe 100%); 
+            overflow: hidden; 
+        } 
+        #game-area { 
+            position: relative; 
+            width: 100%; 
+            height: 100%; 
+            overflow: hidden; 
+        } 
+        /* Sky and background elements */ 
+        #sky { 
+            position: absolute; 
+            width: 100%; 
+            height: 100%; 
+            z-index: 1; 
+        } 
+        .cloud { 
+            position: absolute; 
+            background: rgba(255, 255, 255, 0.8); 
+            border-radius: 50px; 
+            z-index: 1; 
+        } 
+        .cloud:before, .cloud:after { 
+            content: ''; 
+            position: absolute; 
+            background: rgba(255, 255, 255, 0.8); 
+            border-radius: 50%; 
+        } 
+        .cloud:before { 
+            width: 60px; 
+            height: 60px; 
+            top: -30px; 
+            left: 20px; 
+        } 
+        .cloud:after { 
+            width: 40px; 
+            height: 40px; 
+            top: -20px; 
+            right: 20px; 
+        } 
+        #ground { 
+            position: absolute; 
+            bottom: 0; 
+            width: 100%; 
+            height: 60px; 
+            background: linear-gradient(to bottom, #8BC34A, #4CAF50); 
+            z-index: 5; 
+            border-top: 3px solid #388E3C; 
+        } 
+        /* Character */ 
+        #character { 
+            position: absolute; 
+            left: 22%; 
+            width: 75px; 
+            height: 75px; 
+            z-index: 10; 
+            background-size: contain; 
+            background-repeat: no-repeat; 
+            background-position: center; 
+            will-change: transform, top;
+        } 
+        /* Obstacles - Multiple TV9 images stacked */ 
+        .obstacle { 
+            position: absolute; 
+            width: 70px; 
+            z-index: 4; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            overflow: hidden;
+        } 
+        .tv9-image { 
+            width: 100%; 
+            height: 60px; 
+            background-size: contain; 
+            background-repeat: no-repeat; 
+            background-position: center; 
+            flex-shrink: 0;
+        } 
+        .obstacle-top { 
+            border-radius: 0 0 10px 10px; 
+        } 
+        .obstacle-bottom { 
+            border-radius: 10px 10px 0 0; 
+        } 
+        /* Rewards */ 
+        .reward { 
+            position: absolute; 
+            width: 50px; 
+            height: 50px; 
+            z-index: 6; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            background-size: contain; 
+            background-repeat: no-repeat; 
+            background-position: center; 
+        } 
+        /* HUD and UI */ 
+        #hud { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            z-index: 20; 
+            padding: 10px; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+        } 
+        #top-bar { 
+            width: 100%; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            background: rgba(0, 0, 0, 0.5); 
+            backdrop-filter: blur(10px); 
+            border-radius: 50px; 
+            padding: 10px 20px; 
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+        } 
+        #score-display { 
+            font-size: 20px; 
+            font-weight: bold; 
+            color: white; 
+        } 
+        #controls { 
+            display: flex; 
+            gap: 10px; 
+            align-items: center; 
+        } 
+        .control-btn { 
+            width: 40px; 
+            height: 40px; 
+            border-radius: 50%; 
+            background: rgba(255, 255, 255, 0.2); 
+            backdrop-filter: blur(5px); 
+            border: 1px solid rgba(255, 255, 255, 0.3); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            color: white; 
+            font-size: 18px; 
+            cursor: pointer; 
+            transition: all 0.2s ease; 
+        } 
+        .control-btn:active { 
+            transform: scale(0.9); 
+            background: rgba(255, 255, 255, 0.3); 
+        } 
+        /* Creator Credits in Header */ 
+        #creator-credits { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            margin-left: 10px; 
+        } 
+        .creator-profile { 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            padding: 5px 12px; 
+            background: rgba(255, 255, 255, 0.15); 
+            border-radius: 20px; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+        } 
+        .creator-profile:hover { 
+            background: rgba(255, 255, 255, 0.25); 
+        } 
+        .creator-avatar { 
+            width: 30px; 
+            height: 30px; 
+            border-radius: 50%; 
+            background: linear-gradient(135deg, #FF512F, #DD2476); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            font-weight: bold; 
+            font-size: 14px; 
+            overflow: hidden; 
+        } 
+        .creator-avatar img { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+        } 
+        .creator-info { 
+            text-align: left; 
+        } 
+        .creator-name { 
+            font-weight: bold; 
+            font-size: 12px; 
+            line-height: 1.2; 
+        } 
+        .creator-handle { 
+            font-size: 10px; 
+            opacity: 0.8; 
+        } 
+        .creator-modal { 
+            position: absolute; 
+            top: 60px; 
+            right: 20px; 
+            background: rgba(0, 0, 0, 0.85); 
+            backdrop-filter: blur(15px); 
+            border-radius: 15px; 
+            padding: 15px; 
+            width: 220px; 
+            z-index: 100; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            display: none; 
+        } 
+        .creator-modal.active { 
+            display: block; 
+        } 
+        .creator-accounts { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 10px; 
+        } 
+        .account-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+            padding: 8px; 
+            border-radius: 10px; 
+            transition: background 0.3s; 
+            cursor: pointer; 
+            text-decoration: none; 
+            color: white; 
+        } 
+        .account-item:hover { 
+            background: rgba(255, 255, 255, 0.1); 
+        } 
+        .account-icon { 
+            width: 30px; 
+            height: 30px; 
+            border-radius: 50%; 
+            background: linear-gradient(135deg, #405DE6, #5851DB, #833AB4, #C13584, #E1306C, #FD1D1D); 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            font-size: 14px; 
+        } 
+        .account-info { 
+            flex: 1; 
+        } 
+        .account-type { 
+            font-size: 10px; 
+            opacity: 0.7; 
+        } 
+        .account-handle { 
+            font-size: 12px; 
+            font-weight: bold; 
+        } 
+        .follow-text { 
+            text-align: center; 
+            margin-top: 10px; 
+            font-size: 11px; 
+            opacity: 0.7; 
+        } 
+        #collectibles-widget { 
+            position: absolute; 
+            top: 80px; 
+            right: 20px; 
+            background: rgba(0, 0, 0, 0.5); 
+            backdrop-filter: blur(10px); 
+            border-radius: 50px; 
+            padding: 8px 15px; 
+            display: flex; 
+            align-items: center; 
+            gap: 8px; 
+            font-size: 16px; 
+            font-weight: bold; 
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            z-index: 20; 
+        } 
+        #difficulty-widget { 
+            position: absolute; 
+            top: 80px; 
+            left: 20px; 
+            background: rgba(0, 0, 0, 0.5); 
+            backdrop-filter: blur(10px); 
+            border-radius: 50px; 
+            padding: 8px 15px; 
+            display: flex; 
+            flex-direction: column; 
+            gap: 5px; 
+            font-size: 14px; 
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            z-index: 20; 
+            min-width: 120px; 
+        } 
+        #difficulty-label { 
+            display: flex; 
+            align-items: center; 
+            gap: 5px; 
+            font-weight: bold; 
+        } 
+        #difficulty-progress { 
+            height: 6px; 
+            background: rgba(255, 255, 255, 0.2); 
+            border-radius: 3px; 
+            overflow: hidden; 
+        } 
+        #difficulty-progress-bar { 
+            height: 100%; 
+            background: linear-gradient(to right, #4CAF50, #FFC107, #F44336); 
+            border-radius: 3px; 
+            width: 0%; 
+            transition: width 0.5s ease; 
+        } 
+        #instructions { 
+            position: absolute; 
+            bottom: 70px; 
+            width: 100%; 
+            text-align: center; 
+            font-size: 18px; 
+            font-weight: bold; 
+            color: white; 
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); 
+            z-index: 20; 
+            padding: 10px; 
+            background: rgba(0, 0, 0, 0.3); 
+            backdrop-filter: blur(5px); 
+        } 
+        /* Overlays */ 
+        .overlay { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            z-index: 30; 
+            background: rgba(0, 0, 0, 0.7); 
+            backdrop-filter: blur(5px); 
+        } 
+        .card { 
+            background: rgba(255, 255, 255, 0.15); 
+            backdrop-filter: blur(20px); 
+            border-radius: 20px; 
+            padding: 30px; 
+            width: 85%; 
+            max-width: 400px; 
+            text-align: center; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); 
+            border: 1px solid rgba(255, 255, 255, 0.2); 
+            color: white; 
+        } 
+        .card h1 { 
+            font-size: 32px; 
+            margin-bottom: 10px; 
+            background: linear-gradient(to right, #FF512F, #DD2476); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); 
+        } 
+        .buttons { 
+            display: flex; 
+            flex-direction: column; 
+            gap: 15px; 
+            margin-top: 20px; 
+        } 
+        .btn { 
+            padding: 15px 20px; 
+            border-radius: 50px; 
+            border: none; 
+            font-size: 18px; 
+            font-weight: bold; 
+            cursor: pointer; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            gap: 10px; 
+            transition: all 0.3s ease; 
+            background: rgba(255, 255, 255, 0.2); 
+            color: white; 
+            border: 1px solid rgba(255, 255, 255, 0.3); 
+        } 
+        .btn-primary { 
+            background: linear-gradient(135deg, #FF512F, #DD2476); 
+            box-shadow: 0 5px 15px rgba(221, 36, 118, 0.4); 
+        } 
+        .btn:active { 
+            transform: scale(0.95); 
+        } 
+        #countdown-overlay { 
+            background: rgba(0, 0, 0, 0.5); 
+        } 
+        #countdown { 
+            font-size: 100px; 
+            font-weight: bold; 
+            color: white; 
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.5); 
+        } 
+        #game-over-overlay .card { 
+            background: rgba(0, 0, 0, 0.8); 
+            padding: 20px; 
+        } 
+        .game-over-image { 
+            width: 100%; 
+            max-width: 300px; 
+            margin: 0 auto 20px; 
+            overflow: hidden; 
+        } 
+        .game-over-image img { 
+            width: 100%; 
+            height: auto; 
+            display: block; 
+        } 
+        .stats { 
+            display: flex; 
+            justify-content: space-around; 
+            margin: 20px 0; 
+        } 
+        .stat { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+        } 
+        .stat-value { 
+            font-size: 24px; 
+            font-weight: bold; 
+            margin-top: 5px; 
+        } 
+        /* Particles and effects */ 
+        .particle { 
+            position: absolute; 
+            pointer-events: none; 
+            z-index: 15; 
+            border-radius: 50%;
+        } 
+        .floating-text { 
+            position: absolute; 
+            color: white; 
+            font-weight: bold; 
+            font-size: 24px; 
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5); 
+            z-index: 15; 
+            pointer-events: none; 
+            animation: float-up 1s ease-out forwards; 
+        } 
+        @keyframes float-up { 
+            0% { transform: translateY(0); opacity: 1; } 
+            100% { transform: translateY(-50px); opacity: 0; } 
+        } 
+        .screen-shake { 
+            animation: shake 0.5s ease-in-out; 
+        } 
+        @keyframes shake { 
+            0%, 100% { transform: translateX(0); } 
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); } 
+            20%, 40%, 60%, 80% { transform: translateX(5px); } 
+        } 
+        .red-flash { 
+            animation: red-flash 0.3s ease-out; 
+        } 
+        @keyframes red-flash { 
+            0% { background-color: rgba(255, 0, 0, 0); } 
+            50% { background-color: rgba(255, 0, 0, 0.3); } 
+            100% { background-color: rgba(255, 0, 0, 0); } 
+        } 
+        .settings-item { 
+            margin: 15px 0; 
+            text-align: left; 
+        } 
+        .settings-item label { 
+            display: block; 
+            margin-bottom: 8px; 
+            font-weight: bold; 
+        } 
+        .slider-container { 
+            display: flex; 
+            align-items: center; 
+            gap: 10px; 
+        } 
+        .slider { 
+            flex: 1; 
+            -webkit-appearance: none; 
+            height: 8px; 
+            border-radius: 4px; 
+            background: rgba(255, 255, 255, 0.2); 
+            outline: none; 
+        } 
+        .slider::-webkit-slider-thumb { 
+            -webkit-appearance: none; 
+            width: 20px; 
+            height: 20px; 
+            border-radius: 50%; 
+            background: linear-gradient(135deg, #FF512F, #DD2476); 
+            cursor: pointer; 
+        } 
+        @media (max-height: 700px) { 
+            #character { width: 65px; height: 65px; } 
+            .obstacle { width: 60px; } 
+            .tv9-image { height: 50px; } 
+            .reward { width: 40px; height: 40px; } 
+        } 
+    </style> 
+</head> 
+<body> 
+    <div id="game-container"> 
+        <div id="game-area"> 
+            <div id="sky"></div> 
+            <div id="ground"></div> 
+            <div id="character"></div> 
+            
+            <div id="hud"> 
+                <div id="top-bar"> 
+                    <div id="score-display">Score: 0</div> 
+                    <div id="controls"> 
+                        <div id="creator-credits"> 
+                            <div class="creator-profile" id="creator-toggle"> 
+                                <div class="creator-avatar"> 
+                                    <img src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/IMG_20251123_090853_814.webp" alt="Creator"> 
+                                </div> 
+                                <div class="creator-info"> 
+                                    <div class="creator-name">Developer</div> 
+                                    <div class="creator-handle">@justbeingchiru</div> 
+                                </div> 
+                            </div> 
+                        </div> 
+                        <div id="pause-btn" class="control-btn"><i class="fas fa-pause"></i></div> 
+                        <div id="sound-btn" class="control-btn"><i class="fas fa-volume-up"></i></div> 
+                        <div id="settings-btn" class="control-btn"><i class="fas fa-cog"></i></div> 
+                    </div> 
+                </div> 
+            </div> 
+
+            <div class="creator-modal" id="creator-modal"> 
+                <div class="creator-accounts"> 
+                    <a href="https://www.instagram.com/justbeingchiru" class="account-item" target="_blank"> 
+                        <div class="account-icon"><i class="fab fa-instagram"></i></div> 
+                        <div class="account-info"> 
+                            <div class="account-type">Main Account</div> 
+                            <div class="account-handle">@justbeingchiru</div> 
+                        </div> 
+                    </a> 
+                    <a href="https://www.instagram.com/macbruh_ff" class="account-item" target="_blank"> 
+                        <div class="account-icon"><i class="fab fa-instagram"></i></div> 
+                        <div class="account-info"> 
+                            <div class="account-type">Free Fire Gaming</div> 
+                            <div class="account-handle">@macbruh_ff</div> 
+                        </div> 
+                    </a> 
+                    <a href="https://www.instagram.com/animetalkisofficial" class="account-item" target="_blank"> 
+                        <div class="account-icon"><i class="fab fa-instagram"></i></div> 
+                        <div class="account-info"> 
+                            <div class="account-type">Anime Account</div> 
+                            <div class="account-handle">@animetalkisofficial</div> 
+                        </div> 
+                    </a> 
+                </div> 
+                <div class="follow-text">Follow on Instagram!</div> 
+            </div> 
+
+            <div id="collectibles-widget"> 
+                <i class="fas fa-star"></i> 
+                <span id="collectibles-count">0</span> 
+            </div> 
+
+            <div id="difficulty-widget"> 
+                <div id="difficulty-label"> 
+                    <i class="fas fa-tachometer-alt"></i> 
+                    <span>Difficulty</span> 
+                </div> 
+                <div id="difficulty-progress"> 
+                    <div id="difficulty-progress-bar"></div> 
+                </div> 
+            </div> 
+
+            <div id="instructions">Tap or click to fly up!</div> 
+
+            <div id="start-menu" class="overlay"> 
+                <div class="card"> 
+                    <h1>IDRE NEMDIYAAG IRBEK</h1> 
+                    <div class="buttons"> 
+                        <button id="start-btn" class="btn btn-primary"><i class="fas fa-play"></i> Start Game</button> 
+                        <button id="settings-menu-btn" class="btn"><i class="fas fa-cog"></i> Settings</button> 
+                    </div> 
+                </div> 
+            </div> 
+
+            <div id="countdown-overlay" class="overlay" style="display: none;"> 
+                <div id="countdown">3</div> 
+            </div> 
+
+            <div id="pause-overlay" class="overlay" style="display: none;"> 
+                <div class="card"> 
+                    <h1>Game Paused</h1> 
+                    <div class="buttons"> 
+                        <button id="resume-btn" class="btn btn-primary"><i class="fas fa-play"></i> Resume</button> 
+                        <button id="restart-menu-btn" class="btn"><i class="fas fa-redo"></i> Restart</button> 
+                        <button id="main-menu-btn" class="btn"><i class="fas fa-home"></i> Main Menu</button> 
+                    </div> 
+                </div> 
+            </div> 
+
+            <div id="game-over-overlay" class="overlay" style="display: none;"> 
+                <div class="card"> 
+                    <div class="game-over-image"> 
+                        <img src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/Game%20over.png" alt="Game Over"> 
+                    </div> 
+                    <div class="stats"> 
+                        <div class="stat"> 
+                            <div>Score</div> 
+                            <div id="final-score" class="stat-value">0</div> 
+                        </div> 
+                        <div class="stat"> 
+                            <div>Collectibles</div> 
+                            <div id="final-collectibles" class="stat-value">0</div> 
+                        </div> 
+                        <div class="stat"> 
+                            <div>Best</div> 
+                            <div id="best-score" class="stat-value">0</div> 
+                        </div> 
+                    </div> 
+                    <div class="buttons"> 
+                        <button id="restart-game-over-btn" class="btn btn-primary"><i class="fas fa-redo"></i> Play Again</button> 
+                        <button id="main-menu-game-over-btn" class="btn"><i class="fas fa-home"></i> Main Menu</button> 
+                    </div> 
+                </div> 
+            </div> 
+
+            <div id="settings-overlay" class="overlay" style="display: none;"> 
+                <div class="card"> 
+                    <h1>Settings</h1> 
+                    <div class="settings-item"> 
+                        <label for="sound-slider">Sound Volume</label> 
+                        <div class="slider-container"> 
+                            <input type="range" id="sound-slider" class="slider" min="0" max="100" value="70"> 
+                            <span id="sound-value">70%</span> 
+                        </div> 
+                    </div> 
+                    <div class="buttons"> 
+                        <button id="back-btn" class="btn btn-primary"><i class="fas fa-arrow-left"></i> Back</button> 
+                    </div> 
+                </div> 
+            </div> 
+        </div> 
+    </div> 
+
+    <audio id="heart-sound" preload="auto"><source src="https://github.com/MACBRUH-OFC/-Simulator/blob/main/Resources/Audio/Heart.mp3?raw=true" type="audio/mpeg"></audio> 
+    <audio id="tv9-sound" preload="auto"><source src="https://github.com/MACBRUH-OFC/-Simulator/blob/main/Resources/Audio/Tv9Tap.mp3?raw=true" type="audio/mpeg"></audio> 
+    <audio id="game-over-sound" preload="auto"><source src="https://github.com/MACBRUH-OFC/-Simulator/blob/main/Resources/Audio/GameOverSound.mp3?raw=true" type="audio/mpeg"></audio> 
+    <audio id="flap-sound" preload="auto"><source src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/main/Resources/Audio/Flap.mp3" type="audio/mpeg"></audio> 
+    <audio id="point-sound" preload="auto"><source src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/main/Resources/Audio/Point.mp3" type="audio/mpeg"></audio> 
+
+    <script> 
+        const gameState = { 
+            current: 'START_MENU', 
+            score: 0, 
+            collectibles: 0, 
+            bestScore: parseInt(localStorage.getItem('darshanAdventureBestScore')) || 0, 
+            difficultyLevel: 0, 
+            soundVolume: 70, 
+            isMuted: false 
+        }; 
+
+        // Perfectly tuned flappy engine constants
+        const PHYSICS = { 
+            gravity: 0.35, 
+            jumpForce: -7.2, 
+            terminalVelocity: 9.0, 
+            characterStartX: 0.22, 
+            groundHeight: 60 
+        }; 
+
+        const elements = { 
+            character: document.getElementById('character'), 
+            gameArea: document.getElementById('game-area'), 
+            sky: document.getElementById('sky'), 
+            scoreDisplay: document.getElementById('score-display'), 
+            collectiblesCount: document.getElementById('collectibles-count'), 
+            difficultyProgressBar: document.getElementById('difficulty-progress-bar'), 
+            startMenu: document.getElementById('start-menu'), 
+            countdownOverlay: document.getElementById('countdown-overlay'), 
+            countdown: document.getElementById('countdown'), 
+            pauseOverlay: document.getElementById('pause-overlay'), 
+            gameOverOverlay: document.getElementById('game-over-overlay'), 
+            settingsOverlay: document.getElementById('settings-overlay'), 
+            instructions: document.getElementById('instructions'), 
+            finalScore: document.getElementById('final-score'), 
+            finalCollectibles: document.getElementById('final-collectibles'), 
+            bestScore: document.getElementById('best-score'), 
+            soundSlider: document.getElementById('sound-slider'), 
+            soundValue: document.getElementById('sound-value'), 
+            soundBtn: document.getElementById('sound-btn'), 
+            creatorToggle: document.getElementById('creator-toggle'), 
+            creatorModal: document.getElementById('creator-modal'), 
+            heartSound: document.getElementById('heart-sound'), 
+            tv9Sound: document.getElementById('tv9-sound'), 
+            gameOverSound: document.getElementById('game-over-sound'), 
+            flapSound: document.getElementById('flap-sound'), 
+            pointSound: document.getElementById('point-sound') 
+        }; 
+
+        const IMAGES = { 
+            character: 'https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/DFace.png', 
+            tv9Obstacle: 'https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/TV9Logo.webp', 
+            pavitraGowda: 'https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/Heart.png', 
+            renukaswamy: 'https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/BrokenBeega.png' 
+        }; 
+
+        let characterY = 0; 
+        let characterVelocity = 0; 
+        let obstacles = []; 
+        let rewards = []; 
+        let particles = []; 
+        let floatingTexts = []; 
+        let clouds = []; 
+        let lastObstacleTime = 0; 
+        let lastRewardTime = 0; 
+        let lastDifficultyIncrease = 0; 
+        let safeStartTime = 0; 
+        let animationId = null; 
+        let lastTimestamp = 0; 
+
+        function init() { 
+            setupEventListeners(); 
+            resetCharacter(); 
+            createInitialClouds(); 
+            elements.bestScore.textContent = gameState.bestScore; 
+            updateSoundVolume(); 
+            preloadImages(); 
+        } 
+
+        function preloadImages() { 
+            Object.values(IMAGES).forEach(url => { const img = new Image(); img.src = url; }); 
+            elements.character.style.backgroundImage = `url('${IMAGES.character}')`; 
+        } 
+
+        function setupEventListeners() { 
+            elements.gameArea.addEventListener('click', handleTap); 
+            document.addEventListener('keydown', handleKeyDown); 
+            document.getElementById('start-btn').addEventListener('click', startGame); 
+            document.getElementById('settings-menu-btn').addEventListener('click', () => showSettings(true)); 
+            document.getElementById('pause-btn').addEventListener('click', togglePause); 
+            document.getElementById('resume-btn').addEventListener('click', resumeGame); 
+            document.getElementById('restart-menu-btn').addEventListener('click', restartGame); 
+            document.getElementById('main-menu-btn').addEventListener('click', goToMainMenu); 
+            document.getElementById('restart-game-over-btn').addEventListener('click', restartGame); 
+            document.getElementById('main-menu-game-over-btn').addEventListener('click', goToMainMenu); 
+            elements.soundBtn.addEventListener('click', toggleMute); 
+            document.getElementById('settings-btn').addEventListener('click', () => showSettings(false)); 
+            document.getElementById('back-btn').addEventListener('click', hideSettings); 
+            elements.soundSlider.addEventListener('input', updateSoundVolume); 
+            elements.creatorToggle.addEventListener('click', toggleCreatorModal); 
+            document.addEventListener('click', closeCreatorModal); 
+        } 
+
+        function toggleCreatorModal(e) { e.stopPropagation(); elements.creatorModal.classList.toggle('active'); } 
+        function closeCreatorModal(e) { if (!elements.creatorModal.contains(e.target) && e.target !== elements.creatorToggle) elements.creatorModal.classList.remove('active'); } 
+
+        function handleTap(e) { 
+            if (e.target.closest('.control-btn') || e.target.closest('#top-bar') || e.target.closest('.creator-modal')) return;
+            if (gameState.current === 'PLAYING') jump(); 
+        } 
+
+        function handleKeyDown(e) { 
+            if (e.code === 'Space') { e.preventDefault(); if (gameState.current === 'PLAYING') jump(); } 
+            else if (e.code === 'Escape') { if (gameState.current === 'PLAYING') togglePause(); else if (gameState.current === 'PAUSED') resumeGame(); } 
+        } 
+
+        function jump() { 
+            characterVelocity = PHYSICS.jumpForce; 
+            createFlapParticles(); 
+            playSound('flap'); 
+        } 
+
+        function startGame() { 
+            gameState.current = 'COUNTDOWN'; 
+            gameState.score = 0; 
+            gameState.collectibles = 0; 
+            gameState.difficultyLevel = 0; 
+            elements.startMenu.style.display = 'none'; 
+            elements.countdownOverlay.style.display = 'flex'; 
+            elements.instructions.style.display = 'none'; 
+            updateScoreDisplay(); 
+            updateCollectiblesDisplay(); 
+            updateDifficultyDisplay(); 
+            resetCharacter(); 
+            clearGameElements(); 
+            
+            let count = 3; 
+            elements.countdown.textContent = count; 
+            const countdownInterval = setInterval(() => { 
+                count--; 
+                if (count > 0) { elements.countdown.textContent = count; } 
+                else { 
+                    elements.countdown.textContent = "GO!"; 
+                    setTimeout(() => { 
+                        elements.countdownOverlay.style.display = 'none'; 
+                        gameState.current = 'PLAYING'; 
+                        safeStartTime = Date.now(); 
+                        lastObstacleTime = Date.now() + 1000; 
+                        lastRewardTime = Date.now() + 1500;
+                        lastDifficultyIncrease = Date.now();
+                        lastTimestamp = performance.now(); 
+                        if(animationId) cancelAnimationFrame(animationId);
+                        animationId = requestAnimationFrame(gameLoop); 
+                        clearInterval(countdownInterval); 
+                    }, 400); 
+                } 
+            }, 800); 
+        } 
+
+        function togglePause() { 
+            if (gameState.current === 'PLAYING') { 
+                gameState.current = 'PAUSED'; 
+                elements.pauseOverlay.style.display = 'flex'; 
+                cancelAnimationFrame(animationId); 
+            } 
+        } 
+
+        function resumeGame() { 
+            if (gameState.current === 'PAUSED') { 
+                gameState.current = 'PLAYING'; 
+                elements.pauseOverlay.style.display = 'none'; 
+                lastTimestamp = performance.now(); 
+                animationId = requestAnimationFrame(gameLoop); 
+            } 
+        } 
+
+        function restartGame() { 
+            elements.pauseOverlay.style.display = 'none'; 
+            elements.gameOverOverlay.style.display = 'none'; 
+            startGame(); 
+        } 
+
+        let cameFromStartMenu = true;
+        function showSettings(fromStart) {
+            cameFromStartMenu = fromStart;
+            if (gameState.current === 'PLAYING') togglePause();
+            elements.settingsOverlay.style.display = 'flex';
         }
 
-        if(pipe.x < -100){
-
-            pipe.top.remove();
-            pipe.bottom.remove();
-
-            pipes.splice(index,1);
-
-        }
-
-    });
-
-}
-
-/* =========================
-   SPAWN PIPE
-========================= */
-
-function spawnPipe(){
-
-    difficulty += 0.15;
-
-    if(difficulty > 10){
-        difficulty = 10;
-    }
-
-    difficultyFill.style.width =
-    (difficulty * 10) + "%";
-
-    const gap =
-    Math.max(
-        GAME.minPipeGap,
-        GAME.pipeGap - difficulty * 5
-    );
-
-    const topHeight =
-    random(120,
-    window.innerHeight - gap - 260);
-
-    const bottomY =
-    topHeight + gap;
-
-    const bottomHeight =
-    window.innerHeight -
-    bottomY -
-    100;
-
-    const top = document.createElement("div");
-
-    top.className = "pipe";
-
-    top.style.height = topHeight + "px";
-    top.style.left = window.innerWidth + "px";
-    top.style.top = "0px";
-
-    const topStack = document.createElement("div");
-    topStack.className = "pipe-stack";
-
-    top.appendChild(topStack);
-
-    game.appendChild(top);
-
-    const bottom = document.createElement("div");
-
-    bottom.className = "pipe";
-
-    bottom.style.height = bottomHeight + "px";
-    bottom.style.left = window.innerWidth + "px";
-    bottom.style.top = bottomY + "px";
-
-    const bottomStack = document.createElement("div");
-    bottomStack.className = "pipe-stack";
-
-    bottom.appendChild(bottomStack);
-
-    game.appendChild(bottom);
-
-    pipes.push({
-
-        x:window.innerWidth,
-        top,
-        bottom,
-        passed:false
-
-    });
-
-    if(Math.random() > .4){
-
-        spawnCoin(
-            window.innerWidth + 180,
-            topHeight + gap/2 - 30
-        );
-
-    }
-
-}
-
-/* =========================
-   COINS
-========================= */
-
-function spawnCoin(x,y){
-
-    const coin = document.createElement("div");
-
-    coin.className = "coin";
-
-    const isHeart = Math.random() > .5;
-
-    coin.style.backgroundImage =
-    isHeart
-    ? "url('https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/Heart.png')"
-    : "url('https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/BrokenBeega.png')";
-
-    coin.style.left = x + "px";
-    coin.style.top = y + "px";
-
-    game.appendChild(coin);
-
-    coins.push({
-
-        x,
-        y,
-        el:coin
-
-    });
-
-}
-
-function updateCoins(){
-
-    coins.forEach((coin,index)=>{
-
-        coin.x -= GAME.speed;
-
-        coin.el.style.left = coin.x + "px";
-
-        const hit =
-        rectHit(player,coin.el);
-
-        if(hit){
-
-            createParticles(
-                coin.x+20,
-                coin.y+20
-            );
-
-            score += 5;
-
-            updateScore();
-
-            coin.el.remove();
-
-            coins.splice(index,1);
-
-        }
-
-        if(coin.x < -100){
-
-            coin.el.remove();
-
-            coins.splice(index,1);
-
-        }
-
-    });
-
-}
-
-/* =========================
-   COLLISION
-========================= */
-
-function detectCollision(){
-
-    for(let pipe of pipes){
-
-        if(
-            rectHit(player,pipe.top) ||
-            rectHit(player,pipe.bottom)
-        ){
-
-            endGame();
-
-        }
-
-    }
-
-}
-
-/* =========================
-   END GAME
-========================= */
-
-function endGame(){
-
-    if(!playing) return;
-
-    playing = false;
-
-    cancelAnimationFrame(animation);
-
-    overAudio.currentTime = 0;
-    overAudio.play();
-
-    if(score > best){
-
-        best = score;
-
-        localStorage.setItem(
-            "bestScoreDarshan",
-            best
-        );
-
-    }
-
-    finalScore.innerText = score;
-    bestScoreText.innerText = best;
-
-    gameover.style.display = "flex";
-
-}
-
-/* =========================
-   SCORE
-========================= */
-
-function updateScore(){
-
-    scoreText.innerText = score;
-
-}
-
-/* =========================
-   COLLISION FUNCTION
-========================= */
-
-function rectHit(a,b){
-
-    const r1 = a.getBoundingClientRect();
-    const r2 = b.getBoundingClientRect();
-
-    return !(
-        r1.top > r2.bottom ||
-        r1.bottom < r2.top ||
-        r1.right < r2.left ||
-        r1.left > r2.right
-    );
-
-}
-
-/* =========================
-   RANDOM
-========================= */
-
-function random(min,max){
-
-    return Math.floor(
-        Math.random() * (max-min) + min
-    );
-
-}
-
-/* =========================
-   PARTICLES
-========================= */
-
-function createParticles(x,y){
-
-    for(let i=0;i<10;i++){
-
-        const p = document.createElement("div");
-
-        p.className = "particle";
-
-        const size = random(4,10);
-
-        p.style.width = size+"px";
-        p.style.height = size+"px";
-
-        p.style.background =
-        `rgba(255,255,255,.9)`;
-
-        p.style.left = x+"px";
-        p.style.top = y+"px";
-
-        game.appendChild(p);
-
-        const vx = (Math.random()-.5)*6;
-        const vy = (Math.random()-.5)*6;
-
-        let life = 30;
-
-        const move = ()=>{
-
-            if(life <= 0){
-
-                p.remove();
-
-                return;
-
+        function hideSettings() {
+            elements.settingsOverlay.style.display = 'none';
+            if (!cameFromStartMenu && gameState.current === 'PAUSED') {
+                // remains paused beautifully
             }
-
-            life--;
-
-            x += vx;
-            y += vy;
-
-            p.style.left = x+"px";
-            p.style.top = y+"px";
-
-            p.style.opacity = life/30;
-
-            requestAnimationFrame(move);
-
-        };
-
-        move();
-
-    }
-
-}
-
-/* =========================
-   CLOUDS
-========================= */
-
-function createClouds(){
-
-    const sky = document.getElementById("sky");
-
-    for(let i=0;i<6;i++){
-
-        const c = document.createElement("div");
-
-        c.className = "cloud";
-
-        const w = random(90,160);
-        const h = random(40,70);
-
-        c.style.width = w+"px";
-        c.style.height = h+"px";
-
-        c.style.left =
-        random(0,window.innerWidth)+"px";
-
-        c.style.top =
-        random(30,300)+"px";
-
-        sky.appendChild(c);
-
-        animateCloud(c,w);
-
-    }
-
-}
-
-function animateCloud(cloud,w){
-
-    let x = parseFloat(cloud.style.left);
-
-    function move(){
-
-        x -= .3;
-
-        if(x < -w){
-
-            x = window.innerWidth + 100;
-
         }
 
-        cloud.style.left = x + "px";
+        function goToMainMenu() { 
+            gameState.current = 'START_MENU'; 
+            clearGameElements(); 
+            resetCharacter(); 
+            elements.startMenu.style.display = 'flex'; 
+            elements.pauseOverlay.style.display = 'none'; 
+            elements.gameOverOverlay.style.display = 'none'; 
+            elements.settingsOverlay.style.display = 'none'; 
+            elements.instructions.style.display = 'block'; 
+            if (animationId) { cancelAnimationFrame(animationId); animationId = null; } 
+        } 
 
-        requestAnimationFrame(move);
+        function toggleMute() { 
+            gameState.isMuted = !gameState.isMuted; 
+            updateSoundVolume(); 
+            elements.soundBtn.querySelector('i').className = gameState.isMuted ? 'fas fa-volume-mute' : 'fas fa-volume-up'; 
+        } 
 
-    }
+        function updateSoundVolume() { 
+            if (!gameState.isMuted) gameState.soundVolume = elements.soundSlider.value; 
+            elements.soundValue.textContent = gameState.isMuted ? '0%' : `${gameState.soundVolume}%`; 
+            const vol = gameState.isMuted ? 0 : gameState.soundVolume / 100; 
+            ['heartSound','tv9Sound','gameOverSound','flapSound','pointSound'].forEach(s => elements[s].volume = vol); 
+        } 
 
-    move();
+        function playSound(type) { 
+            if (gameState.isMuted) return; 
+            try { 
+                const el = elements[type + 'Sound'] || elements[type === 'pavitra' ? 'heartSound' : type === 'tv9' ? 'tv9Sound' : type + 'Sound'];
+                if(el) { el.currentTime = 0; el.play().catch(()=>{}); }
+            } catch(e) {} 
+        } 
 
-}
+        function resetCharacter() { 
+            const gameHeight = elements.gameArea.clientHeight || window.innerHeight; 
+            characterY = gameHeight / 2 - PHYSICS.groundHeight; 
+            characterVelocity = 0; 
+            updateCharacterPosition(); 
+        } 
 
-/* =========================
-   RESTART
-========================= */
+        function updateCharacterPosition() { 
+            const gameWidth = elements.gameArea.clientWidth; 
+            elements.character.style.left = `${gameWidth * PHYSICS.characterStartX}px`; 
+            elements.character.style.top = `${characterY}px`; 
+        } 
 
-function restartGame(){
+        function gameLoop(timestamp) { 
+            if (gameState.current !== 'PLAYING') return; 
+            if (!lastTimestamp) lastTimestamp = timestamp; 
+            const deltaTime = Math.min((timestamp - lastTimestamp) / 16.666, 4.0); 
+            lastTimestamp = timestamp; 
 
-    startGame();
+            updatePhysics(deltaTime); 
+            updateObstacles(deltaTime); 
+            updateRewards(deltaTime); 
+            updateParticles(); 
+            updateFloatingTexts(); 
+            updateClouds(deltaTime); 
+            updateDifficulty(); 
+            checkCollisions(); 
 
-}
+            animationId = requestAnimationFrame(gameLoop); 
+        } 
 
-</script>
+        function updatePhysics(deltaTime) { 
+            characterVelocity += PHYSICS.gravity * deltaTime; 
+            if (characterVelocity > PHYSICS.terminalVelocity) characterVelocity = PHYSICS.terminalVelocity; 
+            characterY += characterVelocity * deltaTime; 
 
-</body>
+            if (characterY < 0) { characterY = 0; characterVelocity = 0; } 
+            const maxBot = elements.gameArea.clientHeight - PHYSICS.groundHeight - elements.character.clientHeight; 
+            if (characterY > maxBot) { characterY = maxBot; endGame(); return; } 
+            updateCharacterPosition(); 
+        } 
+
+        function updateObstacles(deltaTime) { 
+            const gameWidth = elements.gameArea.clientWidth; 
+            const currentTime = Date.now(); 
+            const obstacleSpeed = 3.8 * (1 + gameState.difficultyLevel * 0.06); 
+            const spawnInterval = 2500 / (1 + gameState.difficultyLevel * 0.12); 
+
+            if (currentTime - lastObstacleTime > spawnInterval) { 
+                spawnObstacle(); 
+                lastObstacleTime = currentTime; 
+            } 
+
+            for (let i = obstacles.length - 1; i >= 0; i--) { 
+                const obs = obstacles[i]; 
+                obs.x -= obstacleSpeed * deltaTime; 
+                obs.topElement.style.left = `${obs.x}px`; 
+                obs.bottomElement.style.left = `${obs.x}px`; 
+
+                if (!obs.passed && obs.x + obs.width < gameWidth * PHYSICS.characterStartX) { 
+                    obs.passed = true; 
+                    increaseScore(1); 
+                    createFloatingText('+1', elements.character.offsetLeft, elements.character.offsetTop); 
+                    playSound('point'); 
+                } 
+
+                if (obs.x + obs.width < 0) { 
+                    elements.gameArea.removeChild(obs.topElement); 
+                    elements.gameArea.removeChild(obs.bottomElement); 
+                    obstacles.splice(i, 1); 
+                } 
+            } 
+        } 
+
+        function spawnObstacle() { 
+            const gameWidth = elements.gameArea.clientWidth; 
+            const gameHeight = elements.gameArea.clientHeight; 
+            // Fair dynamic sizing layout options:
+            const gapHeight = Math.max(190, 260 - (gameState.difficultyLevel * 6)); 
+            const minTop = 60; 
+            const maxTop = gameHeight - gapHeight - minTop - PHYSICS.groundHeight; 
+            const topHeight = minTop + Math.random() * (maxTop - minTop); 
+            const bottomHeight = gameHeight - topHeight - gapHeight - PHYSICS.groundHeight; 
+
+            const topObstacle = document.createElement('div'); 
+            topObstacle.className = 'obstacle obstacle-top'; 
+            topObstacle.style.left = `${gameWidth}px`; 
+            topObstacle.style.top = '0'; 
+            topObstacle.style.height = `${topHeight}px`; 
+
+            const tv9CountTop = Math.ceil(topHeight / 60); 
+            for (let i = 0; i < tv9CountTop; i++) { 
+                const img = document.createElement('div'); img.className = 'tv9-image'; 
+                img.style.backgroundImage = `url('${IMAGES.tv9Obstacle}')`; topObstacle.appendChild(img); 
+            } 
+            elements.gameArea.appendChild(topObstacle); 
+
+            const bottomObstacle = document.createElement('div'); 
+            bottomObstacle.className = 'obstacle obstacle-bottom'; 
+            bottomObstacle.style.left = `${gameWidth}px`; 
+            bottomObstacle.style.top = `${gameHeight - bottomHeight - PHYSICS.groundHeight}px`; 
+            bottomObstacle.style.height = `${bottomHeight}px`; 
+
+            const tv9CountBottom = Math.ceil(bottomHeight / 60); 
+            for (let i = 0; i < tv9CountBottom; i++) { 
+                const img = document.createElement('div'); img.className = 'tv9-image'; 
+                img.style.backgroundImage = `url('${IMAGES.tv9Obstacle}')`; bottomObstacle.appendChild(img); 
+            } 
+            elements.gameArea.appendChild(bottomObstacle); 
+
+            obstacles.push({ topElement: topObstacle, bottomElement: bottomObstacle, x: gameWidth, width: 70, passed: false }); 
+        } 
+
+        function updateRewards(deltaTime) { 
+            const gameWidth = elements.gameArea.clientWidth; 
+            const currentTime = Date.now(); 
+
+            if (currentTime - lastRewardTime > 3400) { 
+                spawnReward(); 
+                lastRewardTime = currentTime; 
+            } 
+
+            for (let i = rewards.length - 1; i >= 0; i--) { 
+                const rwd = rewards[i]; 
+                rwd.x -= 2.8 * deltaTime; 
+                rwd.element.style.left = `${rwd.x}px`; 
+
+                if (rwd.x + rwd.width < 0) { 
+                    elements.gameArea.removeChild(rwd.element); 
+                    rewards.splice(i, 1); 
+                } 
+            } 
+        } 
+
+        function spawnReward() { 
+            const gameWidth = elements.gameArea.clientWidth; 
+            const gameHeight = elements.gameArea.clientHeight; 
+            const minY = 80; 
+            const maxY = gameHeight - 100 - PHYSICS.groundHeight; 
+            const y = minY + Math.random() * (maxY - minY); 
+            const isPavitra = Math.random() > 0.5; 
+            const type = isPavitra ? 'pavitra' : 'renukaswamy'; 
+            const url = isPavitra ? IMAGES.pavitraGowda : IMAGES.renukaswamy; 
+
+            const reward = document.createElement('div'); 
+            reward.className = 'reward'; 
+            reward.style.left = `${gameWidth}px`; 
+            reward.style.top = `${y}px`; 
+            reward.style.backgroundImage = `url('${url}')`; 
+            elements.gameArea.appendChild(reward); 
+
+            rewards.push({ element: reward, x: gameWidth, y: y, width: 50, height: 50, type: type }); 
+        } 
+
+        function updateParticles() { 
+            for (let i = particles.length - 1; i >= 0; i--) { 
+                const p = particles[i]; 
+                p.x += p.vx; p.y += p.vy; p.life--; 
+                p.element.style.left = `${p.x}px`; 
+                p.element.style.top = `${p.y}px`; 
+                p.element.style.opacity = p.life / p.maxLife; 
+
+                if (p.life <= 0) { elements.gameArea.removeChild(p.element); particles.splice(i, 1); } 
+            } 
+        } 
+
+        function updateFloatingTexts() { 
+            for (let i = floatingTexts.length - 1; i >= 0; i--) { 
+                const t = floatingTexts[i]; 
+                t.y -= 1.5; t.life--; 
+                t.element.style.left = `${t.x}px`; 
+                t.element.style.top = `${t.y}px`; 
+                t.element.style.opacity = t.life / t.maxLife; 
+
+                if (t.life <= 0) { elements.gameArea.removeChild(t.element); floatingTexts.splice(i, 1); } 
+            } 
+        } 
+
+        function updateClouds(deltaTime) { 
+            if (clouds.length < 4 && Math.random() < 0.008) spawnCloud(); 
+            for (let i = clouds.length - 1; i >= 0; i--) { 
+                const c = clouds[i]; c.x -= 0.4 * deltaTime; 
+                c.element.style.left = `${c.x}px`; 
+                if (c.x + c.width < 0) { elements.sky.removeChild(c.element); clouds.splice(i, 1); } 
+            } 
+        } 
+
+        function createInitialClouds() { for (let i = 0; i < 3; i++) spawnCloud(Math.random() * window.innerWidth); } 
+
+        function spawnCloud(startX) { 
+            const gameWidth = elements.gameArea.clientWidth; 
+            const x = startX !== undefined ? startX : gameWidth; 
+            const cloud = document.createElement('div'); 
+            cloud.className = 'cloud'; 
+            const w = 80 + Math.random() * 50; 
+            cloud.style.width = `${w}px`; 
+            cloud.style.height = `${40 + Math.random() * 20}px`; 
+            cloud.style.left = `${x}px`; 
+            cloud.style.top = `${30 + Math.random() * 150}px`; 
+            elements.sky.appendChild(cloud); 
+            clouds.push({ element: cloud, x: x, width: w }); 
+        } 
+
+        function updateDifficulty() { 
+            const now = Date.now(); 
+            if (now - lastDifficultyIncrease > 12000 && gameState.difficultyLevel < 10) { 
+                gameState.difficultyLevel++; 
+                lastDifficultyIncrease = now; 
+                updateDifficultyDisplay(); 
+            } 
+        } 
+
+        function checkCollisions() { 
+            // Soft precision inner padding box variables
+            const cPad = 6; 
+            const cRect = { 
+                x: elements.character.offsetLeft + cPad, 
+                y: characterY + cPad, 
+                w: elements.character.clientWidth - (cPad * 2), 
+                h: elements.character.clientHeight - (cPad * 2) 
+            }; 
+
+            for (const obs of obstacles) { 
+                const topH = parseFloat(obs.topElement.style.height); 
+                if (cRect.x + cRect.w > obs.x && cRect.x < obs.x + obs.width) {
+                    if (cRect.y < topH || cRect.y + cRect.h > topH + (elements.gameArea.clientHeight - topH - parseFloat(obs.bottomElement.style.height))) {
+                        endGame(); 
+                        return; 
+                    }
+                }
+            } 
+
+            for (let i = rewards.length - 1; i >= 0; i--) { 
+                const r = rewards[i]; 
+                if (cRect.x < r.x + r.width && cRect.x + cRect.w > r.x && cRect.y < r.y + r.height && cRect.y + cRect.h > r.y) { 
+                    gameState.collectibles++; 
+                    increaseScore(5); 
+                    createFloatingText('+5', elements.character.offsetLeft, characterY); 
+                    createRewardParticles(r.x, r.y); 
+                    playSound(r.type); 
+                    elements.gameArea.removeChild(r.element); 
+                    rewards.splice(i, 1); 
+                    updateCollectiblesDisplay(); 
+                } 
+            } 
+        } 
+
+        function endGame() { 
+            gameState.current = 'GAME_OVER'; 
+            playSound('gameOver'); 
+            elements.gameArea.classList.add('screen-shake', 'red-flash'); 
+            setTimeout(() => elements.gameArea.classList.remove('screen-shake', 'red-flash'), 500); 
+            createDeathParticles(); 
+
+            if (gameState.score > gameState.bestScore) { 
+                gameState.bestScore = gameState.score; 
+                localStorage.setItem('darshanAdventureBestScore', gameState.bestScore); 
+            } 
+
+            elements.finalScore.textContent = gameState.score; 
+            elements.finalCollectibles.textContent = gameState.collectibles; 
+            elements.bestScore.textContent = gameState.bestScore; 
+            elements.gameOverOverlay.style.display = 'flex'; 
+            cancelAnimationFrame(animationId); 
+        } 
+
+        function increaseScore(amt) { gameState.score += amt; updateScoreDisplay(); } 
+        function updateScoreDisplay() { elements.scoreDisplay.textContent = `Score: ${gameState.score}`; } 
+        function updateCollectiblesDisplay() { elements.collectiblesCount.textContent = gameState.collectibles; } 
+        function updateDifficultyDisplay() { elements.difficultyProgressBar.style.width = `${gameState.difficultyLevel * 10}%`; } 
+
+        function createFlapParticles() { 
+            const x = elements.character.offsetLeft; 
+            const y = characterY + 30; 
+            for (let i = 0; i < 6; i++) createParticle(x, y, '#FF512F', '#DD2476'); 
+        } 
+
+        function createDeathParticles() { 
+            const x = elements.character.offsetLeft + 30; 
+            for (let i = 0; i < 16; i++) createParticle(x, characterY + 30, '#FF512F', '#DD2476', 2); 
+        } 
+
+        function createRewardParticles(x, y) { 
+            for (let i = 0; i < 10; i++) createParticle(x + 25, y + 25, '#FFD700', '#FF9800'); 
+        } 
+
+        function createParticle(x, y, c1, c2, multi = 1) { 
+            const p = document.createElement('div'); 
+            p.className = 'particle'; 
+            const size = (3 + Math.random() * 4) * multi; 
+            p.style.width = `${size}px`; p.style.height = `${size}px`; 
+            p.style.background = `radial-gradient(circle, ${c1}, ${c2})`; 
+            elements.gameArea.appendChild(p); 
+            particles.push({ 
+                element: p, x: x, y: y, 
+                vx: (Math.random() - 0.5) * 5, vy: (Math.random() - 0.4) * 5, 
+                life: 25 + Math.random() * 20, maxLife: 45 
+            }); 
+        } 
+
+        function createFloatingText(txt, x, y) { 
+            const t = document.createElement('div'); 
+            t.className = 'floating-text'; t.textContent = txt; 
+            t.style.left = `${x}px`; t.style.top = `${y}px`; 
+            elements.gameArea.appendChild(t); 
+            floatingTexts.push({ element: t, x: x, y: y, life: 45, maxLife: 45 }); 
+        } 
+
+        function clearGameElements() { 
+            obstacles.forEach(o => { elements.gameArea.removeChild(o.topElement); elements.gameArea.removeChild(o.bottomElement); }); 
+            rewards.forEach(r => elements.gameArea.removeChild(r.element)); 
+            particles.forEach(p => elements.gameArea.removeChild(p.element)); 
+            floatingTexts.forEach(t => elements.gameArea.removeChild(t.element)); 
+            obstacles = []; rewards = []; particles = []; floatingTexts = []; 
+        } 
+
+        window.addEventListener('load', init); 
+    </script> 
+</body> 
 </html>
