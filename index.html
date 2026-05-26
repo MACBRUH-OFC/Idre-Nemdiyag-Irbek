@@ -1,6 +1,15 @@
+<!--
+========================================================
+IDRE NEMDIYAAG IRBEK
+Premium Fun Edition
+Developer : @justbeingchiru
+========================================================
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport"
 content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -26,25 +35,26 @@ body{
     background:#000;
 }
 
-/* =======================================================
-   MAIN GAME
-======================================================= */
+/* ======================================================
+   GAME AREA
+====================================================== */
 
 #game{
     position:relative;
     width:100vw;
     height:100vh;
     overflow:hidden;
+
     background:
     linear-gradient(to bottom,
-    #58b7ff 0%,
-    #47d6ff 40%,
-    #9fe8ff 100%);
+    #5ec8ff 0%,
+    #56dfff 45%,
+    #c9f5ff 100%);
 }
 
-/* =======================================================
-   PREMIUM BACKGROUND
-======================================================= */
+/* ======================================================
+   BACKGROUND
+====================================================== */
 
 #sky{
     position:absolute;
@@ -57,33 +67,27 @@ body{
     position:absolute;
     top:70px;
     right:70px;
+
     width:140px;
     height:140px;
+
     border-radius:50%;
+
     background:
     radial-gradient(circle,
-    #fff8d0,
-    #ffe082);
-    box-shadow:
-    0 0 60px rgba(255,215,0,.55),
-    0 0 120px rgba(255,215,0,.25);
-    z-index:0;
-}
+    #fff8d7,
+    #ffd54f);
 
-.mountain{
-    position:absolute;
-    bottom:95px;
-    background:
-    linear-gradient(to top,
-    rgba(0,0,0,.12),
-    rgba(255,255,255,.08));
-    clip-path:polygon(50% 0%,0% 100%,100% 100%);
-    z-index:2;
+    box-shadow:
+    0 0 60px rgba(255,215,0,.5),
+    0 0 120px rgba(255,215,0,.22);
+
+    z-index:0;
 }
 
 .cloud{
     position:absolute;
-    background:rgba(255,255,255,.85);
+    background:rgba(255,255,255,.88);
     border-radius:100px;
 }
 
@@ -91,112 +95,147 @@ body{
 .cloud::after{
     content:'';
     position:absolute;
-    background:rgba(255,255,255,.85);
+    background:rgba(255,255,255,.88);
     border-radius:50%;
 }
 
 .cloud::before{
     width:60px;
     height:60px;
-    top:-30px;
+    top:-28px;
     left:18px;
 }
 
 .cloud::after{
     width:42px;
     height:42px;
-    top:-18px;
+    top:-16px;
     right:18px;
 }
 
-/* =======================================================
+.mountain{
+    position:absolute;
+    bottom:95px;
+
+    clip-path:
+    polygon(50% 0%,0% 100%,100% 100%);
+
+    background:
+    linear-gradient(to top,
+    rgba(0,0,0,.18),
+    rgba(255,255,255,.08));
+
+    z-index:2;
+}
+
+/* ======================================================
    GROUND
-======================================================= */
+====================================================== */
 
 #ground{
     position:absolute;
     bottom:0;
+
     width:100%;
     height:95px;
+
     background:
     linear-gradient(to bottom,
-    #78d64b,
-    #2f9e44);
+    #89df5d,
+    #37a74f);
+
     border-top:5px solid #1f7a2f;
+
     z-index:8;
 }
 
-#grass-line{
+#grass{
     position:absolute;
     top:0;
+
     width:100%;
     height:18px;
+
     background:
     repeating-linear-gradient(
     -45deg,
-    #b9ff7f,
-    #b9ff7f 10px,
-    #91e95b 10px,
-    #91e95b 20px);
+    #b7ff7f,
+    #b7ff7f 10px,
+    #8fe65b 10px,
+    #8fe65b 20px);
 }
 
-/* =======================================================
+/* ======================================================
    PLAYER
-======================================================= */
+====================================================== */
 
 #player{
     position:absolute;
+
     width:88px;
     height:88px;
+
     background-size:contain;
     background-repeat:no-repeat;
     background-position:center;
-    z-index:60;
+
+    z-index:50;
+
     transition:transform .08s linear;
+
     filter:
-    drop-shadow(0 10px 14px rgba(0,0,0,.28));
+    drop-shadow(0 12px 18px rgba(0,0,0,.28));
 }
 
-/* =======================================================
+/* ======================================================
    TOP HEADER
-======================================================= */
+====================================================== */
 
 #top-header{
     position:absolute;
     top:0;
+
     width:100%;
     padding:14px;
+
     z-index:300;
 }
 
 #header-box{
     width:100%;
-    border-radius:28px;
-    padding:14px 16px;
-    background:
-    rgba(0,0,0,.25);
-    backdrop-filter:blur(14px);
-    border:1px solid rgba(255,255,255,.12);
+
+    padding:14px 18px;
+
+    border-radius:30px;
 
     display:flex;
     justify-content:space-between;
     align-items:center;
+
+    background:
+    rgba(0,0,0,.24);
+
+    backdrop-filter:blur(14px);
+
+    border:1px solid rgba(255,255,255,.12);
 }
 
-/* LEFT */
+/* LEFT HEADER */
 
 #left-ui{
     display:flex;
     align-items:center;
-    gap:14px;
+    gap:15px;
 }
 
 #score-box{
     display:flex;
     align-items:center;
     gap:8px;
+
     color:white;
-    font-size:22px;
+
+    font-size:24px;
     font-weight:800;
 }
 
@@ -208,35 +247,43 @@ body{
     display:flex;
     flex-direction:column;
     gap:4px;
+
     color:white;
 }
 
 #difficulty-box small{
-    opacity:.75;
     font-size:11px;
+    opacity:.75;
 }
 
 #difficulty-bar{
     width:120px;
     height:8px;
+
     border-radius:20px;
+
     overflow:hidden;
-    background:rgba(255,255,255,.18);
+
+    background:
+    rgba(255,255,255,.18);
 }
 
 #difficulty-fill{
     width:0%;
     height:100%;
+
     border-radius:20px;
+
     background:
     linear-gradient(to right,
     #4caf50,
     #ffc107,
     #f44336);
-    transition:width .35s ease;
+
+    transition:width .3s ease;
 }
 
-/* RIGHT */
+/* RIGHT HEADER */
 
 #right-ui{
     display:flex;
@@ -244,34 +291,41 @@ body{
     gap:12px;
 }
 
-#dev-credit{
+#profile-card{
     display:flex;
     align-items:center;
     gap:10px;
-    padding:7px 10px;
-    border-radius:30px;
-    background:rgba(255,255,255,.12);
+
+    padding:7px 12px;
+
+    border-radius:28px;
+
+    background:
+    rgba(255,255,255,.12);
 }
 
-#dev-credit img{
-    width:38px;
-    height:38px;
+#profile-card img{
+    width:42px;
+    height:42px;
+
     border-radius:50%;
+
     object-fit:cover;
-    border:2px solid rgba(255,255,255,.2);
+
+    border:2px solid rgba(255,255,255,.22);
 }
 
-.dev-text{
+.profile-text{
     color:white;
-    line-height:1.15;
+    line-height:1.2;
 }
 
-.dev-name{
+.profile-name{
     font-size:13px;
     font-weight:700;
 }
 
-.dev-tag{
+.profile-tag{
     font-size:10px;
     opacity:.72;
 }
@@ -279,115 +333,111 @@ body{
 .ui-btn{
     width:44px;
     height:44px;
+
     border:none;
     border-radius:50%;
-    background:rgba(255,255,255,.16);
+
     color:white;
     font-size:16px;
+
+    background:
+    rgba(255,255,255,.14);
 }
 
-/* =======================================================
+/* ======================================================
    PIPES
-======================================================= */
+====================================================== */
 
 .pipe{
     position:absolute;
+
     width:82px;
+
     overflow:hidden;
-    z-index:20;
+
     border-radius:18px;
-    background:rgba(255,255,255,.05);
+
+    z-index:20;
+
+    background:
+    rgba(255,255,255,.04);
+
     border:2px solid rgba(255,255,255,.08);
+
     box-shadow:
-    0 6px 14px rgba(0,0,0,.18);
+    0 8px 16px rgba(0,0,0,.18);
 }
 
 .pipe-inner{
     width:100%;
     height:100%;
+
     background-image:
     url('https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/TV9Logo.webp');
-    background-size:72px;
+
     background-repeat:repeat-y;
+    background-size:72px;
     background-position:center;
 }
 
-/* =======================================================
+/* ======================================================
    REWARDS
-======================================================= */
+====================================================== */
 
 .reward{
     position:absolute;
+
     width:62px;
     height:62px;
+
     background-size:contain;
     background-repeat:no-repeat;
     background-position:center;
-    z-index:35;
 
-    animation:rewardFloat 1.4s infinite ease-in-out;
+    z-index:30;
+
+    animation:rewardFloat 1.3s infinite ease-in-out;
 
     filter:
     drop-shadow(0 0 14px rgba(255,255,255,.35));
 }
 
 @keyframes rewardFloat{
+
     0%,100%{
         transform:translateY(0px);
     }
+
     50%{
         transform:translateY(-8px);
     }
+
 }
 
-/* =======================================================
-   TAP TEXT
-======================================================= */
-
-#tap-text{
-    position:absolute;
-    bottom:130px;
-    width:100%;
-    text-align:center;
-    z-index:120;
-    color:white;
-    font-size:22px;
-    font-weight:800;
-    text-shadow:
-    0 3px 10px rgba(0,0,0,.45);
-
-    animation:pulse 1.2s infinite;
-}
-
-@keyframes pulse{
-    0%,100%{
-        opacity:1;
-    }
-    50%{
-        opacity:.45;
-    }
-}
-
-/* =======================================================
+/* ======================================================
    FOOTER SOCIAL BAR
-======================================================= */
+====================================================== */
 
 #footer-bar{
     position:absolute;
-    bottom:100px;
+
+    bottom:105px;
     left:50%;
+
     transform:translateX(-50%);
-    z-index:200;
+
+    z-index:220;
 
     display:flex;
+    align-items:center;
     gap:12px;
 
-    padding:10px 14px;
+    padding:12px 16px;
 
-    border-radius:30px;
+    border-radius:32px;
 
     background:
-    rgba(0,0,0,.22);
+    rgba(0,0,0,.24);
 
     backdrop-filter:blur(12px);
 
@@ -395,19 +445,22 @@ body{
 }
 
 .social-btn{
-    width:44px;
-    height:44px;
+    width:48px;
+    height:48px;
+
     border-radius:50%;
+
     display:flex;
     align-items:center;
     justify-content:center;
 
-    color:white;
     text-decoration:none;
 
+    color:white;
     font-size:18px;
 
-    background:rgba(255,255,255,.14);
+    background:
+    rgba(255,255,255,.14);
 
     transition:.2s;
 }
@@ -416,30 +469,98 @@ body{
     transform:scale(.9);
 }
 
-/* =======================================================
+/* ======================================================
+   TAP TEXT
+====================================================== */
+
+#tap-text{
+    position:absolute;
+
+    width:100%;
+    bottom:150px;
+
+    text-align:center;
+
+    z-index:150;
+
+    color:white;
+
+    font-size:23px;
+    font-weight:800;
+
+    text-shadow:
+    0 3px 10px rgba(0,0,0,.45);
+
+    animation:pulse 1.2s infinite;
+}
+
+@keyframes pulse{
+
+    0%,100%{
+        opacity:1;
+    }
+
+    50%{
+        opacity:.4;
+    }
+
+}
+
+/* ======================================================
+   DISCLAIMER
+====================================================== */
+
+#disclaimer{
+    position:absolute;
+
+    bottom:12px;
+    width:100%;
+
+    text-align:center;
+
+    color:white;
+
+    font-size:11px;
+
+    opacity:.72;
+
+    z-index:250;
+
+    text-shadow:
+    0 2px 8px rgba(0,0,0,.35);
+}
+
+/* ======================================================
    OVERLAY
-======================================================= */
+====================================================== */
 
 .overlay{
     position:absolute;
     inset:0;
-    background:rgba(0,0,0,.55);
+
+    background:
+    rgba(0,0,0,.55);
+
     backdrop-filter:blur(8px);
 
     display:flex;
-    align-items:center;
     justify-content:center;
+    align-items:center;
 
     z-index:500;
 }
 
 .card{
     width:90%;
-    max-width:420px;
+    max-width:430px;
 
     padding:30px;
 
-    border-radius:32px;
+    border-radius:34px;
+
+    text-align:center;
+
+    color:white;
 
     background:
     rgba(255,255,255,.12);
@@ -447,13 +568,10 @@ body{
     backdrop-filter:blur(18px);
 
     border:1px solid rgba(255,255,255,.12);
-
-    text-align:center;
-    color:white;
 }
 
 .card h1{
-    font-size:40px;
+    font-size:42px;
 
     margin-bottom:10px;
 
@@ -467,17 +585,18 @@ body{
 }
 
 .card p{
-    opacity:.8;
-    margin-bottom:22px;
+    opacity:.82;
+    margin-bottom:20px;
 }
 
 .big-btn{
     width:100%;
-    border:none;
+
+    padding:16px;
 
     margin-top:12px;
 
-    padding:16px;
+    border:none;
 
     border-radius:22px;
 
@@ -492,39 +611,42 @@ body{
     #dd2476);
 }
 
-/* =======================================================
-   GAME OVER SOCIALS ALWAYS VISIBLE
-======================================================= */
+/* ======================================================
+   GAME OVER SOCIALS
+====================================================== */
 
-#gameover-socials{
+#game-socials{
+    margin-top:22px;
+
     display:flex;
     justify-content:center;
     gap:12px;
-
-    margin-top:20px;
 }
 
 .game-social{
     text-decoration:none;
+
     color:white;
 
-    background:rgba(255,255,255,.14);
+    font-size:13px;
+    font-weight:700;
 
     padding:12px 18px;
 
     border-radius:18px;
 
-    font-size:14px;
-    font-weight:700;
+    background:
+    rgba(255,255,255,.14);
 }
 
-/* =======================================================
+/* ======================================================
    SETTINGS PANEL
-======================================================= */
+====================================================== */
 
-#settings-panel{
+#settings{
     position:absolute;
-    top:90px;
+
+    top:92px;
     right:14px;
 
     width:240px;
@@ -534,7 +656,7 @@ body{
     border-radius:24px;
 
     background:
-    rgba(0,0,0,.35);
+    rgba(0,0,0,.34);
 
     backdrop-filter:blur(14px);
 
@@ -550,7 +672,8 @@ body{
 .setting-title{
     font-size:18px;
     font-weight:700;
-    margin-bottom:14px;
+
+    margin-bottom:16px;
 }
 
 .setting-item{
@@ -559,8 +682,11 @@ body{
 
 .setting-item label{
     display:block;
+
     margin-bottom:6px;
+
     font-size:13px;
+
     opacity:.85;
 }
 
@@ -568,20 +694,9 @@ body{
     width:100%;
 }
 
-/* =======================================================
-   PARTICLES
-======================================================= */
-
-.particle{
-    position:absolute;
-    border-radius:50%;
-    pointer-events:none;
-    z-index:120;
-}
-
-/* =======================================================
+/* ======================================================
    RESPONSIVE
-======================================================= */
+====================================================== */
 
 @media(max-width:460px){
 
@@ -598,27 +713,26 @@ body{
         width:80px;
     }
 
-    #dev-credit{
-        padding:6px 8px;
+    #profile-card img{
+        width:34px;
+        height:34px;
     }
 
-    #dev-credit img{
-        width:32px;
-        height:32px;
-    }
-
-    .dev-name{
+    .profile-name{
         font-size:11px;
     }
 
 }
 
 </style>
+
 </head>
 
 <body>
 
 <div id="game">
+
+    <!-- SKY -->
 
     <div id="sky"></div>
 
@@ -627,13 +741,13 @@ body{
     <!-- MOUNTAINS -->
 
     <div class="mountain"
-    style="left:-100px;width:400px;height:260px;"></div>
+    style="left:-100px;width:420px;height:260px;"></div>
 
     <div class="mountain"
-    style="left:220px;width:350px;height:220px;"></div>
+    style="left:220px;width:360px;height:230px;"></div>
 
     <div class="mountain"
-    style="right:-100px;width:420px;height:280px;"></div>
+    style="right:-120px;width:440px;height:280px;"></div>
 
     <!-- PLAYER -->
 
@@ -648,8 +762,11 @@ body{
             <div id="left-ui">
 
                 <div id="score-box">
+
                     <i class="fas fa-star"></i>
+
                     <span id="score">0</span>
+
                 </div>
 
                 <div id="difficulty-box">
@@ -657,7 +774,9 @@ body{
                     <small>Difficulty</small>
 
                     <div id="difficulty-bar">
+
                         <div id="difficulty-fill"></div>
+
                     </div>
 
                 </div>
@@ -666,17 +785,19 @@ body{
 
             <div id="right-ui">
 
-                <div id="dev-credit">
+                <!-- PROFILE -->
+
+                <div id="profile-card">
 
                     <img src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/IMG_20251123_090853_814.webp">
 
-                    <div class="dev-text">
+                    <div class="profile-text">
 
-                        <div class="dev-name">
-                            Developer
+                        <div class="profile-name">
+                            Chirantan / Chiru
                         </div>
 
-                        <div class="dev-tag">
+                        <div class="profile-tag">
                             @justbeingchiru
                         </div>
 
@@ -684,12 +805,18 @@ body{
 
                 </div>
 
-                <button class="ui-btn" id="muteBtn">
+                <button class="ui-btn"
+                id="muteBtn">
+
                     <i class="fas fa-volume-up"></i>
+
                 </button>
 
-                <button class="ui-btn" id="settingsBtn">
+                <button class="ui-btn"
+                id="settingsBtn">
+
                     <i class="fas fa-cog"></i>
+
                 </button>
 
             </div>
@@ -700,23 +827,10 @@ body{
 
     <!-- SETTINGS -->
 
-    <div id="settings-panel">
+    <div id="settings">
 
         <div class="setting-title">
             Game Settings
-        </div>
-
-        <div class="setting-item">
-
-            <label>Game Speed</label>
-
-            <input type="range"
-            min="2"
-            max="5"
-            step="0.1"
-            value="2.9"
-            id="speedRange">
-
         </div>
 
         <div class="setting-item">
@@ -728,20 +842,33 @@ body{
             max="0.35"
             step="0.01"
             value="0.20"
-            id="gravityRange">
+            id="gravitySlider">
 
         </div>
 
         <div class="setting-item">
 
-            <label>Sound Volume</label>
+            <label>Game Speed</label>
+
+            <input type="range"
+            min="2"
+            max="5"
+            step="0.1"
+            value="2.9"
+            id="speedSlider">
+
+        </div>
+
+        <div class="setting-item">
+
+            <label>Volume</label>
 
             <input type="range"
             min="0"
             max="1"
             step="0.05"
             value="1"
-            id="volumeRange">
+            id="volumeSlider">
 
         </div>
 
@@ -753,7 +880,7 @@ body{
         TAP TO FLY
     </div>
 
-    <!-- FOOTER -->
+    <!-- FOOTER SOCIALS -->
 
     <div id="footer-bar">
 
@@ -783,13 +910,22 @@ body{
 
     </div>
 
+    <!-- DISCLAIMER -->
+
+    <div id="disclaimer">
+        This game is created only for fun & entertainment purposes.
+        No hate or harassment intended.
+    </div>
+
     <!-- GROUND -->
 
     <div id="ground">
-        <div id="grass-line"></div>
+
+        <div id="grass"></div>
+
     </div>
 
-    <!-- START -->
+    <!-- START OVERLAY -->
 
     <div class="overlay"
     id="startOverlay">
@@ -801,7 +937,8 @@ body{
             </h1>
 
             <p>
-                Premium smooth gameplay experience
+                Smooth premium gameplay experience by
+                <b>@justbeingchiru</b>
             </p>
 
             <button class="big-btn"
@@ -825,14 +962,14 @@ body{
 
             <img
             src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/Game%20over.png"
-            style="width:100%;margin-bottom:10px;">
+            style="width:100%;margin-bottom:12px;">
 
             <h1>
                 GAME OVER
             </h1>
 
             <p>
-                Try again and beat your high score
+                Thanks for playing ❤️
             </p>
 
             <div style="
@@ -841,13 +978,19 @@ body{
             margin-top:20px;">
 
                 <div>
+
                     <small>Score</small>
+
                     <h2 id="finalScore">0</h2>
+
                 </div>
 
                 <div>
+
                     <small>Best</small>
+
                     <h2 id="bestScore">0</h2>
+
                 </div>
 
             </div>
@@ -859,9 +1002,9 @@ body{
 
             </button>
 
-            <!-- ALWAYS VISIBLE SOCIALS -->
+            <!-- SOCIALS -->
 
-            <div id="gameover-socials">
+            <div id="game-socials">
 
                 <a class="game-social"
                 href="https://www.instagram.com/justbeingchiru"
@@ -891,9 +1034,9 @@ body{
 
 <script>
 
-/* =======================================================
+/* ======================================================
    PLAYER IMAGE
-======================================================= */
+====================================================== */
 
 const player =
 document.getElementById("player");
@@ -901,9 +1044,9 @@ document.getElementById("player");
 player.style.backgroundImage =
 "url('https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/DFace.png')";
 
-/* =======================================================
+/* ======================================================
    CLOUDS
-======================================================= */
+====================================================== */
 
 for(let i=0;i<5;i++){
 
@@ -927,7 +1070,7 @@ for(let i=0;i<5;i++){
     c.style.left = x+"px";
 
     c.style.top =
-    rand(40,250)+"px";
+    rand(40,240)+"px";
 
     document
     .getElementById("sky")
@@ -946,12 +1089,11 @@ function animateCloud(c,w,x){
         if(x < -w){
 
             x =
-            window.innerWidth+50;
+            window.innerWidth + 60;
 
         }
 
-        c.style.left =
-        x+"px";
+        c.style.left = x+"px";
 
         requestAnimationFrame(move);
 
@@ -961,17 +1103,18 @@ function animateCloud(c,w,x){
 
 }
 
-/* =======================================================
-   GAME STATE
-======================================================= */
+/* ======================================================
+   GAME VARIABLES
+====================================================== */
 
 let gravity = 0.20;
 let speed = 2.9;
 
-let y = window.innerHeight/2;
+let y = window.innerHeight / 2;
 let velocity = 0;
 
 let score = 0;
+
 let best =
 localStorage.getItem("bestScore") || 0;
 
@@ -982,13 +1125,92 @@ document
 let playing = false;
 
 let pipes = [];
-let rewards = [];
 
 let lastSpawn = 0;
 
-/* =======================================================
+/* ======================================================
+   START
+====================================================== */
+
+document
+.getElementById("startBtn")
+.onclick = startGame;
+
+document
+.getElementById("restartBtn")
+.onclick = startGame;
+
+function startGame(){
+
+    document
+    .getElementById("startOverlay")
+    .style.display = "none";
+
+    document
+    .getElementById("gameOverOverlay")
+    .style.display = "none";
+
+    resetGame();
+
+    playing = true;
+
+    loop();
+
+}
+
+function resetGame(){
+
+    pipes.forEach(p=>{
+
+        p.top.remove();
+        p.bottom.remove();
+
+    });
+
+    pipes = [];
+
+    score = 0;
+
+    document
+    .getElementById("score")
+    .innerText = score;
+
+    y = window.innerHeight / 2;
+
+    velocity = 0;
+
+}
+
+/* ======================================================
+   CONTROLS
+====================================================== */
+
+document
+.getElementById("game")
+.addEventListener("click", flap);
+
+document
+.addEventListener("keydown", e=>{
+
+    if(e.code === "Space"){
+
+        flap();
+
+    }
+
+});
+
+function flap(){
+
+    if(!playing) return;
+
+    velocity = -5.9;
+
+}
+
+/* ======================================================
    LOOP
-======================================================= */
+====================================================== */
 
 function loop(){
 
@@ -998,17 +1220,15 @@ function loop(){
 
     updatePipes();
 
-    updateRewards();
-
     collisions();
 
     requestAnimationFrame(loop);
 
 }
 
-/* =======================================================
-   PHYSICS
-======================================================= */
+/* ======================================================
+   PLAYER PHYSICS
+====================================================== */
 
 function physics(){
 
@@ -1045,89 +1265,9 @@ function physics(){
 
 }
 
-/* =======================================================
-   START
-======================================================= */
-
-document
-.getElementById("startBtn")
-.onclick = startGame;
-
-document
-.getElementById("restartBtn")
-.onclick = startGame;
-
-function startGame(){
-
-    document
-    .getElementById("startOverlay")
-    .style.display = "none";
-
-    document
-    .getElementById("gameOverOverlay")
-    .style.display = "none";
-
-    reset();
-
-    playing = true;
-
-    loop();
-
-}
-
-function reset(){
-
-    score = 0;
-
-    document
-    .getElementById("score")
-    .innerText = score;
-
-    pipes.forEach(p=>{
-
-        p.top.remove();
-        p.bottom.remove();
-
-    });
-
-    rewards.forEach(r=>r.el.remove());
-
-    pipes = [];
-    rewards = [];
-
-    y = window.innerHeight/2;
-    velocity = 0;
-
-}
-
-/* =======================================================
-   TAP
-======================================================= */
-
-document
-.getElementById("game")
-.addEventListener("click",()=>{
-
-    if(!playing) return;
-
-    velocity = -5.9;
-
-});
-
-document
-.addEventListener("keydown",e=>{
-
-    if(e.code === "Space"){
-
-        velocity = -5.9;
-
-    }
-
-});
-
-/* =======================================================
+/* ======================================================
    PIPES
-======================================================= */
+====================================================== */
 
 function updatePipes(){
 
@@ -1162,6 +1302,11 @@ function updatePipes(){
             .getElementById("score")
             .innerText = score;
 
+            document
+            .getElementById("difficulty-fill")
+            .style.width =
+            Math.min(score*2,100)+"%";
+
         }
 
         if(p.x < -120){
@@ -1179,15 +1324,11 @@ function updatePipes(){
 
 function spawnPipe(){
 
-    document
-    .getElementById("difficulty-fill")
-    .style.width =
-    Math.min(score*2,100)+"%";
-
     const gap = 280;
 
     const topHeight =
-    rand(120,
+    rand(
+    120,
     window.innerHeight-gap-260);
 
     const bottomY =
@@ -1258,15 +1399,16 @@ function spawnPipe(){
 
 }
 
-/* =======================================================
+/* ======================================================
    COLLISION
-======================================================= */
+====================================================== */
 
 function collisions(){
 
     pipes.forEach(p=>{
 
-        if(hit(player,p.top) ||
+        if(
+        hit(player,p.top) ||
         hit(player,p.bottom)){
 
             endGame();
@@ -1296,9 +1438,9 @@ function hit(a,b){
 
 }
 
-/* =======================================================
+/* ======================================================
    END GAME
-======================================================= */
+====================================================== */
 
 function endGame(){
 
@@ -1329,16 +1471,17 @@ function endGame(){
 
 }
 
-/* =======================================================
+/* ======================================================
    SETTINGS
-======================================================= */
-
-const settings =
-document.getElementById("settings-panel");
+====================================================== */
 
 document
 .getElementById("settingsBtn")
 .onclick = ()=>{
+
+    const settings =
+    document
+    .getElementById("settings");
 
     settings.style.display =
     settings.style.display ===
@@ -1351,7 +1494,7 @@ document
 };
 
 document
-.getElementById("gravityRange")
+.getElementById("gravitySlider")
 .oninput = e=>{
 
     gravity =
@@ -1360,7 +1503,7 @@ document
 };
 
 document
-.getElementById("speedRange")
+.getElementById("speedSlider")
 .oninput = e=>{
 
     speed =
@@ -1368,9 +1511,9 @@ document
 
 };
 
-/* =======================================================
+/* ======================================================
    RANDOM
-======================================================= */
+====================================================== */
 
 function rand(min,max){
 
