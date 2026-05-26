@@ -1,11 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
 <title>IDRE NEMDIYAAG IRBEK</title>
 
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
+<link rel="stylesheet"
+href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"/>
 
 <style>
 
@@ -23,16 +26,25 @@ body{
     background:#000;
 }
 
-#game-container{
+/* =======================================================
+   MAIN GAME
+======================================================= */
+
+#game{
     position:relative;
     width:100vw;
     height:100vh;
     overflow:hidden;
     background:
-    linear-gradient(to bottom,#4facfe 0%,#00f2fe 100%);
+    linear-gradient(to bottom,
+    #58b7ff 0%,
+    #47d6ff 40%,
+    #9fe8ff 100%);
 }
 
-/* SKY */
+/* =======================================================
+   PREMIUM BACKGROUND
+======================================================= */
 
 #sky{
     position:absolute;
@@ -41,53 +53,65 @@ body{
     z-index:1;
 }
 
+#sun{
+    position:absolute;
+    top:70px;
+    right:70px;
+    width:140px;
+    height:140px;
+    border-radius:50%;
+    background:
+    radial-gradient(circle,
+    #fff8d0,
+    #ffe082);
+    box-shadow:
+    0 0 60px rgba(255,215,0,.55),
+    0 0 120px rgba(255,215,0,.25);
+    z-index:0;
+}
+
+.mountain{
+    position:absolute;
+    bottom:95px;
+    background:
+    linear-gradient(to top,
+    rgba(0,0,0,.12),
+    rgba(255,255,255,.08));
+    clip-path:polygon(50% 0%,0% 100%,100% 100%);
+    z-index:2;
+}
+
 .cloud{
     position:absolute;
-    background:rgba(255,255,255,.82);
+    background:rgba(255,255,255,.85);
     border-radius:100px;
-    filter:blur(.2px);
 }
 
 .cloud::before,
 .cloud::after{
     content:'';
     position:absolute;
-    background:rgba(255,255,255,.82);
+    background:rgba(255,255,255,.85);
     border-radius:50%;
 }
 
 .cloud::before{
     width:60px;
     height:60px;
-    top:-28px;
+    top:-30px;
     left:18px;
 }
 
 .cloud::after{
-    width:40px;
-    height:40px;
-    top:-15px;
+    width:42px;
+    height:42px;
+    top:-18px;
     right:18px;
 }
 
-/* SUN */
-
-#sun{
-    position:absolute;
-    top:80px;
-    right:50px;
-    width:120px;
-    height:120px;
-    border-radius:50%;
-    background:
-    radial-gradient(circle,#fff8c6,#ffd54f);
-    box-shadow:
-    0 0 40px rgba(255,215,0,.6),
-    0 0 90px rgba(255,215,0,.4);
-    z-index:0;
-}
-
-/* GROUND */
+/* =======================================================
+   GROUND
+======================================================= */
 
 #ground{
     position:absolute;
@@ -95,117 +119,151 @@ body{
     width:100%;
     height:95px;
     background:
-    linear-gradient(to bottom,#8BC34A,#43A047);
-    border-top:4px solid #2E7D32;
+    linear-gradient(to bottom,
+    #78d64b,
+    #2f9e44);
+    border-top:5px solid #1f7a2f;
     z-index:8;
 }
 
-/* PLAYER */
+#grass-line{
+    position:absolute;
+    top:0;
+    width:100%;
+    height:18px;
+    background:
+    repeating-linear-gradient(
+    -45deg,
+    #b9ff7f,
+    #b9ff7f 10px,
+    #91e95b 10px,
+    #91e95b 20px);
+}
 
-#character{
+/* =======================================================
+   PLAYER
+======================================================= */
+
+#player{
     position:absolute;
     width:88px;
     height:88px;
     background-size:contain;
     background-repeat:no-repeat;
     background-position:center;
-    z-index:50;
+    z-index:60;
     transition:transform .08s linear;
     filter:
-    drop-shadow(0 8px 12px rgba(0,0,0,.3));
+    drop-shadow(0 10px 14px rgba(0,0,0,.28));
 }
 
-/* HUD */
+/* =======================================================
+   TOP HEADER
+======================================================= */
 
-#hud{
+#top-header{
     position:absolute;
     top:0;
     width:100%;
-    padding:12px;
+    padding:14px;
     z-index:300;
 }
 
-#top-bar{
+#header-box{
     width:100%;
-    padding:12px 16px;
-    border-radius:22px;
-    background:rgba(0,0,0,.28);
-    backdrop-filter:blur(12px);
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    color:white;
+    border-radius:28px;
+    padding:14px 16px;
+    background:
+    rgba(0,0,0,.25);
+    backdrop-filter:blur(14px);
     border:1px solid rgba(255,255,255,.12);
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
 }
 
-.left-hud{
+/* LEFT */
+
+#left-ui{
     display:flex;
     align-items:center;
-    gap:12px;
+    gap:14px;
 }
 
 #score-box{
     display:flex;
     align-items:center;
     gap:8px;
+    color:white;
     font-size:22px;
     font-weight:800;
 }
 
 #score-box i{
-    color:#FFD54F;
+    color:#ffd54f;
 }
 
 #difficulty-box{
     display:flex;
     flex-direction:column;
     gap:4px;
+    color:white;
 }
 
-#difficulty-box span{
-    font-size:12px;
-    opacity:.8;
+#difficulty-box small{
+    opacity:.75;
+    font-size:11px;
 }
 
 #difficulty-bar{
     width:120px;
     height:8px;
     border-radius:20px;
-    background:rgba(255,255,255,.18);
     overflow:hidden;
+    background:rgba(255,255,255,.18);
 }
 
 #difficulty-fill{
-    height:100%;
     width:0%;
+    height:100%;
     border-radius:20px;
     background:
-    linear-gradient(to right,#4CAF50,#FFC107,#F44336);
-    transition:width .4s ease;
+    linear-gradient(to right,
+    #4caf50,
+    #ffc107,
+    #f44336);
+    transition:width .35s ease;
 }
 
-/* DEVELOPER */
+/* RIGHT */
 
-#developer-credit{
+#right-ui{
+    display:flex;
+    align-items:center;
+    gap:12px;
+}
+
+#dev-credit{
     display:flex;
     align-items:center;
     gap:10px;
-    padding:6px 10px;
+    padding:7px 10px;
     border-radius:30px;
     background:rgba(255,255,255,.12);
-    border:1px solid rgba(255,255,255,.08);
 }
 
-#developer-credit img{
-    width:36px;
-    height:36px;
+#dev-credit img{
+    width:38px;
+    height:38px;
     border-radius:50%;
     object-fit:cover;
     border:2px solid rgba(255,255,255,.2);
 }
 
-.dev-info{
-    line-height:1.2;
+.dev-text{
+    color:white;
+    line-height:1.15;
 }
 
 .dev-name{
@@ -215,30 +273,33 @@ body{
 
 .dev-tag{
     font-size:10px;
-    opacity:.75;
+    opacity:.72;
 }
 
-/* BUTTON */
-
-.control-btn{
-    width:42px;
-    height:42px;
+.ui-btn{
+    width:44px;
+    height:44px;
     border:none;
     border-radius:50%;
-    background:rgba(255,255,255,.18);
+    background:rgba(255,255,255,.16);
     color:white;
     font-size:16px;
 }
 
-/* PIPES */
+/* =======================================================
+   PIPES
+======================================================= */
 
 .pipe{
     position:absolute;
     width:82px;
     overflow:hidden;
     z-index:20;
-    border-radius:14px;
-    background:rgba(255,255,255,.04);
+    border-radius:18px;
+    background:rgba(255,255,255,.05);
+    border:2px solid rgba(255,255,255,.08);
+    box-shadow:
+    0 6px 14px rgba(0,0,0,.18);
 }
 
 .pipe-inner{
@@ -246,47 +307,55 @@ body{
     height:100%;
     background-image:
     url('https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/TV9Logo.webp');
-    background-repeat:repeat-y;
     background-size:72px;
+    background-repeat:repeat-y;
     background-position:center;
 }
 
-/* REWARD */
+/* =======================================================
+   REWARDS
+======================================================= */
 
 .reward{
     position:absolute;
-    width:60px;
-    height:60px;
+    width:62px;
+    height:62px;
     background-size:contain;
     background-repeat:no-repeat;
     background-position:center;
-    z-index:30;
+    z-index:35;
+
+    animation:rewardFloat 1.4s infinite ease-in-out;
+
     filter:
-    drop-shadow(0 0 10px rgba(255,255,255,.35));
-    animation:rewardFloat 1.4s ease-in-out infinite;
+    drop-shadow(0 0 14px rgba(255,255,255,.35));
 }
 
 @keyframes rewardFloat{
     0%,100%{
-        transform:translateY(0px) scale(1);
+        transform:translateY(0px);
     }
     50%{
-        transform:translateY(-8px) scale(1.06);
+        transform:translateY(-8px);
     }
 }
 
-/* TAP */
+/* =======================================================
+   TAP TEXT
+======================================================= */
 
 #tap-text{
     position:absolute;
-    width:100%;
     bottom:130px;
+    width:100%;
     text-align:center;
+    z-index:120;
     color:white;
     font-size:22px;
     font-weight:800;
-    z-index:100;
-    text-shadow:0 3px 12px rgba(0,0,0,.5);
+    text-shadow:
+    0 3px 10px rgba(0,0,0,.45);
+
     animation:pulse 1.2s infinite;
 }
 
@@ -295,79 +364,213 @@ body{
         opacity:1;
     }
     50%{
-        opacity:.4;
+        opacity:.45;
     }
 }
 
-/* OVERLAYS */
+/* =======================================================
+   FOOTER SOCIAL BAR
+======================================================= */
+
+#footer-bar{
+    position:absolute;
+    bottom:100px;
+    left:50%;
+    transform:translateX(-50%);
+    z-index:200;
+
+    display:flex;
+    gap:12px;
+
+    padding:10px 14px;
+
+    border-radius:30px;
+
+    background:
+    rgba(0,0,0,.22);
+
+    backdrop-filter:blur(12px);
+
+    border:1px solid rgba(255,255,255,.1);
+}
+
+.social-btn{
+    width:44px;
+    height:44px;
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    color:white;
+    text-decoration:none;
+
+    font-size:18px;
+
+    background:rgba(255,255,255,.14);
+
+    transition:.2s;
+}
+
+.social-btn:active{
+    transform:scale(.9);
+}
+
+/* =======================================================
+   OVERLAY
+======================================================= */
 
 .overlay{
     position:absolute;
     inset:0;
     background:rgba(0,0,0,.55);
     backdrop-filter:blur(8px);
+
     display:flex;
     align-items:center;
     justify-content:center;
+
     z-index:500;
 }
 
 .card{
-    width:88%;
+    width:90%;
     max-width:420px;
-    padding:28px;
-    border-radius:30px;
+
+    padding:30px;
+
+    border-radius:32px;
+
+    background:
+    rgba(255,255,255,.12);
+
+    backdrop-filter:blur(18px);
+
+    border:1px solid rgba(255,255,255,.12);
+
     text-align:center;
     color:white;
-    background:rgba(255,255,255,.12);
-    backdrop-filter:blur(18px);
-    border:1px solid rgba(255,255,255,.12);
 }
 
 .card h1{
-    font-size:38px;
-    margin-bottom:8px;
+    font-size:40px;
+
+    margin-bottom:10px;
+
     background:
-    linear-gradient(to right,#ff9966,#ff5e62);
+    linear-gradient(to right,
+    #ff9966,
+    #ff5e62);
+
     -webkit-background-clip:text;
     -webkit-text-fill-color:transparent;
 }
 
 .card p{
     opacity:.8;
-    margin-bottom:24px;
+    margin-bottom:22px;
 }
 
 .big-btn{
     width:100%;
-    margin-top:12px;
     border:none;
-    border-radius:20px;
+
+    margin-top:12px;
+
     padding:16px;
+
+    border-radius:22px;
+
     color:white;
+
     font-size:18px;
     font-weight:800;
+
     background:
-    linear-gradient(to right,#ff512f,#dd2476);
+    linear-gradient(to right,
+    #ff512f,
+    #dd2476);
 }
 
-.big-btn:active{
-    transform:scale(.97);
-}
+/* =======================================================
+   GAME OVER SOCIALS ALWAYS VISIBLE
+======================================================= */
 
-/* GAME OVER */
-
-.stats{
+#gameover-socials{
     display:flex;
-    justify-content:space-around;
+    justify-content:center;
+    gap:12px;
+
     margin-top:20px;
 }
 
-.stats h2{
-    font-size:34px;
+.game-social{
+    text-decoration:none;
+    color:white;
+
+    background:rgba(255,255,255,.14);
+
+    padding:12px 18px;
+
+    border-radius:18px;
+
+    font-size:14px;
+    font-weight:700;
 }
 
-/* PARTICLES */
+/* =======================================================
+   SETTINGS PANEL
+======================================================= */
+
+#settings-panel{
+    position:absolute;
+    top:90px;
+    right:14px;
+
+    width:240px;
+
+    padding:18px;
+
+    border-radius:24px;
+
+    background:
+    rgba(0,0,0,.35);
+
+    backdrop-filter:blur(14px);
+
+    border:1px solid rgba(255,255,255,.12);
+
+    color:white;
+
+    z-index:350;
+
+    display:none;
+}
+
+.setting-title{
+    font-size:18px;
+    font-weight:700;
+    margin-bottom:14px;
+}
+
+.setting-item{
+    margin-bottom:16px;
+}
+
+.setting-item label{
+    display:block;
+    margin-bottom:6px;
+    font-size:13px;
+    opacity:.85;
+}
+
+.setting-item input{
+    width:100%;
+}
+
+/* =======================================================
+   PARTICLES
+======================================================= */
 
 .particle{
     position:absolute;
@@ -376,27 +579,36 @@ body{
     z-index:120;
 }
 
-/* RESPONSIVE */
+/* =======================================================
+   RESPONSIVE
+======================================================= */
 
 @media(max-width:460px){
 
-    #character{
+    #player{
         width:78px;
         height:78px;
     }
 
     .pipe{
-        width:74px;
+        width:72px;
     }
 
-    #developer-credit{
-        gap:7px;
-        padding:5px 8px;
+    #difficulty-bar{
+        width:80px;
     }
 
-    #developer-credit img{
-        width:30px;
-        height:30px;
+    #dev-credit{
+        padding:6px 8px;
+    }
+
+    #dev-credit img{
+        width:32px;
+        height:32px;
+    }
+
+    .dev-name{
+        font-size:11px;
     }
 
 }
@@ -406,23 +618,34 @@ body{
 
 <body>
 
-<div id="game-container">
+<div id="game">
 
     <div id="sky"></div>
 
     <div id="sun"></div>
 
-    <div id="ground"></div>
+    <!-- MOUNTAINS -->
 
-    <div id="character"></div>
+    <div class="mountain"
+    style="left:-100px;width:400px;height:260px;"></div>
 
-    <!-- HUD -->
+    <div class="mountain"
+    style="left:220px;width:350px;height:220px;"></div>
 
-    <div id="hud">
+    <div class="mountain"
+    style="right:-100px;width:420px;height:280px;"></div>
 
-        <div id="top-bar">
+    <!-- PLAYER -->
 
-            <div class="left-hud">
+    <div id="player"></div>
+
+    <!-- HEADER -->
+
+    <div id="top-header">
+
+        <div id="header-box">
+
+            <div id="left-ui">
 
                 <div id="score-box">
                     <i class="fas fa-star"></i>
@@ -431,7 +654,7 @@ body{
 
                 <div id="difficulty-box">
 
-                    <span>Difficulty</span>
+                    <small>Difficulty</small>
 
                     <div id="difficulty-bar">
                         <div id="difficulty-fill"></div>
@@ -441,25 +664,32 @@ body{
 
             </div>
 
-            <div class="left-hud">
+            <div id="right-ui">
 
-                <div id="developer-credit">
+                <div id="dev-credit">
 
                     <img src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/IMG_20251123_090853_814.webp">
 
-                    <div class="dev-info">
+                    <div class="dev-text">
+
                         <div class="dev-name">
                             Developer
                         </div>
+
                         <div class="dev-tag">
                             @justbeingchiru
                         </div>
+
                     </div>
 
                 </div>
 
-                <button class="control-btn" id="muteBtn">
+                <button class="ui-btn" id="muteBtn">
                     <i class="fas fa-volume-up"></i>
+                </button>
+
+                <button class="ui-btn" id="settingsBtn">
+                    <i class="fas fa-cog"></i>
                 </button>
 
             </div>
@@ -468,27 +698,117 @@ body{
 
     </div>
 
-    <!-- TAP TEXT -->
+    <!-- SETTINGS -->
+
+    <div id="settings-panel">
+
+        <div class="setting-title">
+            Game Settings
+        </div>
+
+        <div class="setting-item">
+
+            <label>Game Speed</label>
+
+            <input type="range"
+            min="2"
+            max="5"
+            step="0.1"
+            value="2.9"
+            id="speedRange">
+
+        </div>
+
+        <div class="setting-item">
+
+            <label>Gravity</label>
+
+            <input type="range"
+            min="0.12"
+            max="0.35"
+            step="0.01"
+            value="0.20"
+            id="gravityRange">
+
+        </div>
+
+        <div class="setting-item">
+
+            <label>Sound Volume</label>
+
+            <input type="range"
+            min="0"
+            max="1"
+            step="0.05"
+            value="1"
+            id="volumeRange">
+
+        </div>
+
+    </div>
+
+    <!-- TAP -->
 
     <div id="tap-text">
-        TAP ANYWHERE TO FLY
+        TAP TO FLY
+    </div>
+
+    <!-- FOOTER -->
+
+    <div id="footer-bar">
+
+        <a class="social-btn"
+        href="https://www.instagram.com/justbeingchiru"
+        target="_blank">
+
+            <i class="fab fa-instagram"></i>
+
+        </a>
+
+        <a class="social-btn"
+        href="https://www.instagram.com/macbruh_ff"
+        target="_blank">
+
+            <i class="fas fa-gamepad"></i>
+
+        </a>
+
+        <a class="social-btn"
+        href="https://www.instagram.com/animetalkisofficial"
+        target="_blank">
+
+            <i class="fas fa-film"></i>
+
+        </a>
+
+    </div>
+
+    <!-- GROUND -->
+
+    <div id="ground">
+        <div id="grass-line"></div>
     </div>
 
     <!-- START -->
 
-    <div id="startOverlay" class="overlay">
+    <div class="overlay"
+    id="startOverlay">
 
         <div class="card">
 
-            <h1>IDRE NEMDIYAAG IRBEK</h1>
+            <h1>
+                IDRE NEMDIYAAG IRBEK
+            </h1>
 
             <p>
-                Smooth gravity • Better balance • More addictive gameplay
+                Premium smooth gameplay experience
             </p>
 
-            <button class="big-btn" id="playBtn">
-                <i class="fas fa-play"></i>
+            <button class="big-btn"
+            id="startBtn">
+
                 START GAME
+
             </button>
 
         </div>
@@ -497,7 +817,9 @@ body{
 
     <!-- GAME OVER -->
 
-    <div id="gameOverOverlay" class="overlay" style="display:none;">
+    <div class="overlay"
+    id="gameOverOverlay"
+    style="display:none;">
 
         <div class="card">
 
@@ -505,7 +827,18 @@ body{
             src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/Game%20over.png"
             style="width:100%;margin-bottom:10px;">
 
-            <div class="stats">
+            <h1>
+                GAME OVER
+            </h1>
+
+            <p>
+                Try again and beat your high score
+            </p>
+
+            <div style="
+            display:flex;
+            justify-content:space-around;
+            margin-top:20px;">
 
                 <div>
                     <small>Score</small>
@@ -519,9 +852,36 @@ body{
 
             </div>
 
-            <button class="big-btn" id="restartBtn">
+            <button class="big-btn"
+            id="restartBtn">
+
                 PLAY AGAIN
+
             </button>
+
+            <!-- ALWAYS VISIBLE SOCIALS -->
+
+            <div id="gameover-socials">
+
+                <a class="game-social"
+                href="https://www.instagram.com/justbeingchiru"
+                target="_blank">
+
+                    <i class="fab fa-instagram"></i>
+                    Main
+
+                </a>
+
+                <a class="game-social"
+                href="https://www.instagram.com/macbruh_ff"
+                target="_blank">
+
+                    <i class="fas fa-gamepad"></i>
+                    Gaming
+
+                </a>
+
+            </div>
 
         </div>
 
@@ -529,185 +889,69 @@ body{
 
 </div>
 
-<!-- PRELOAD ASSETS -->
-
-<div style="display:none">
-
-<img src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/DFace.png">
-<img src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/TV9Logo.webp">
-<img src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/Heart.png">
-<img src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/BrokenBeega.png">
-<img src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/Game%20over.png">
-
-</div>
-
-<!-- AUDIO -->
-
-<audio id="flapSound" preload="auto">
-<source src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/main/Resources/Audio/Flap.mp3">
-</audio>
-
-<audio id="pointSound" preload="auto">
-<source src="https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/main/Resources/Audio/Point.mp3">
-</audio>
-
-<audio id="heartSound" preload="auto">
-<source src="https://github.com/MACBRUH-OFC/-Simulator/blob/main/Resources/Audio/Heart.mp3?raw=true">
-</audio>
-
-<audio id="gameOverSound" preload="auto">
-<source src="https://github.com/MACBRUH-OFC/-Simulator/blob/main/Resources/Audio/GameOverSound.mp3?raw=true">
-</audio>
-
 <script>
 
-/* =========================
-   ASSETS PRELOAD
-========================= */
-
-const preloadImages = [
-
-'https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/DFace.png',
-'https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/TV9Logo.webp',
-'https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/Heart.png',
-'https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/BrokenBeega.png',
-'https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/Game%20over.png'
-
-];
-
-preloadImages.forEach(src=>{
-
-    const img = new Image();
-    img.src = src;
-
-});
-
-/* =========================
-   ELEMENTS
-========================= */
-
-const game = document.getElementById("game-container");
-const character = document.getElementById("character");
-
-const scoreText = document.getElementById("score");
-const finalScoreText = document.getElementById("finalScore");
-const bestScoreText = document.getElementById("bestScore");
-
-const playBtn = document.getElementById("playBtn");
-const restartBtn = document.getElementById("restartBtn");
-
-const startOverlay = document.getElementById("startOverlay");
-const gameOverOverlay = document.getElementById("gameOverOverlay");
-
-const difficultyFill = document.getElementById("difficulty-fill");
-
-const flapSound = document.getElementById("flapSound");
-const pointSound = document.getElementById("pointSound");
-const heartSound = document.getElementById("heartSound");
-const gameOverSound = document.getElementById("gameOverSound");
-
-const muteBtn = document.getElementById("muteBtn");
-
-/* =========================
+/* =======================================================
    PLAYER IMAGE
-========================= */
+======================================================= */
 
-character.style.backgroundImage =
+const player =
+document.getElementById("player");
+
+player.style.backgroundImage =
 "url('https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/DFace.png')";
 
-/* =========================
-   PHYSICS
-========================= */
+/* =======================================================
+   CLOUDS
+======================================================= */
 
-const PHYSICS = {
+for(let i=0;i<5;i++){
 
-    gravity:0.20,
-    jump:-5.9,
-    terminal:5.5,
+    const c =
+    document.createElement("div");
 
-    speed:2.9,
+    c.className = "cloud";
 
-    gap:300,
-    minGap:235,
+    const w =
+    rand(90,160);
 
-    spawnRate:2100
+    const h =
+    rand(40,70);
 
-};
+    c.style.width = w+"px";
+    c.style.height = h+"px";
 
-/* =========================
-   GAME STATE
-========================= */
+    let x =
+    rand(0,window.innerWidth);
 
-let playing = false;
+    c.style.left = x+"px";
 
-let y = window.innerHeight / 2;
-let velocity = 0;
+    c.style.top =
+    rand(40,250)+"px";
 
-let pipes = [];
-let rewards = [];
+    document
+    .getElementById("sky")
+    .appendChild(c);
 
-let score = 0;
-
-let difficulty = 0;
-
-let animation;
-
-let lastSpawn = 0;
-
-let muted = false;
-
-let best =
-localStorage.getItem("darshan_best_score") || 0;
-
-bestScoreText.innerText = best;
-
-/* =========================
-   CREATE CLOUDS
-========================= */
-
-function createClouds(){
-
-    const sky = document.getElementById("sky");
-
-    for(let i=0;i<5;i++){
-
-        const cloud = document.createElement("div");
-
-        cloud.className = "cloud";
-
-        const w = rand(90,160);
-        const h = rand(40,70);
-
-        cloud.style.width = w + "px";
-        cloud.style.height = h + "px";
-
-        let x = rand(0,window.innerWidth);
-        let top = rand(30,260);
-
-        cloud.style.left = x + "px";
-        cloud.style.top = top + "px";
-
-        sky.appendChild(cloud);
-
-        animateCloud(cloud,w,x);
-
-    }
+    animateCloud(c,w,x);
 
 }
 
-function animateCloud(cloud,w,x){
+function animateCloud(c,w,x){
 
     function move(){
 
-        x -= .22;
+        x -= .2;
 
         if(x < -w){
 
-            x = window.innerWidth + 50;
+            x =
+            window.innerWidth+50;
 
         }
 
-        cloud.style.left = x + "px";
+        c.style.left =
+        x+"px";
 
         requestAnimationFrame(move);
 
@@ -717,21 +961,113 @@ function animateCloud(cloud,w,x){
 
 }
 
-createClouds();
+/* =======================================================
+   GAME STATE
+======================================================= */
 
-/* =========================
-   START GAME
-========================= */
+let gravity = 0.20;
+let speed = 2.9;
 
-playBtn.onclick = startGame;
-restartBtn.onclick = startGame;
+let y = window.innerHeight/2;
+let velocity = 0;
+
+let score = 0;
+let best =
+localStorage.getItem("bestScore") || 0;
+
+document
+.getElementById("bestScore")
+.innerText = best;
+
+let playing = false;
+
+let pipes = [];
+let rewards = [];
+
+let lastSpawn = 0;
+
+/* =======================================================
+   LOOP
+======================================================= */
+
+function loop(){
+
+    if(!playing) return;
+
+    physics();
+
+    updatePipes();
+
+    updateRewards();
+
+    collisions();
+
+    requestAnimationFrame(loop);
+
+}
+
+/* =======================================================
+   PHYSICS
+======================================================= */
+
+function physics(){
+
+    velocity += gravity;
+
+    if(velocity > 5.5){
+
+        velocity = 5.5;
+
+    }
+
+    y += velocity;
+
+    if(y < 0){
+
+        y = 0;
+
+    }
+
+    const ground =
+    window.innerHeight - 95 - 88;
+
+    if(y > ground){
+
+        endGame();
+
+    }
+
+    player.style.left = "22vw";
+    player.style.top = y+"px";
+
+    player.style.transform =
+    `rotate(${velocity*4}deg)`;
+
+}
+
+/* =======================================================
+   START
+======================================================= */
+
+document
+.getElementById("startBtn")
+.onclick = startGame;
+
+document
+.getElementById("restartBtn")
+.onclick = startGame;
 
 function startGame(){
 
-    startOverlay.style.display = "none";
-    gameOverOverlay.style.display = "none";
+    document
+    .getElementById("startOverlay")
+    .style.display = "none";
 
-    resetGame();
+    document
+    .getElementById("gameOverOverlay")
+    .style.display = "none";
+
+    reset();
 
     playing = true;
 
@@ -739,11 +1075,13 @@ function startGame(){
 
 }
 
-/* =========================
-   RESET
-========================= */
+function reset(){
 
-function resetGame(){
+    score = 0;
+
+    document
+    .getElementById("score")
+    .innerText = score;
 
     pipes.forEach(p=>{
 
@@ -757,133 +1095,45 @@ function resetGame(){
     pipes = [];
     rewards = [];
 
-    score = 0;
-
-    difficulty = 0;
-
-    scoreText.innerText = 0;
-
-    difficultyFill.style.width = "0%";
-
-    y = window.innerHeight / 2;
-
+    y = window.innerHeight/2;
     velocity = 0;
 
 }
 
-/* =========================
-   CONTROLS
-========================= */
+/* =======================================================
+   TAP
+======================================================= */
 
-game.addEventListener("click", flap);
+document
+.getElementById("game")
+.addEventListener("click",()=>{
 
-document.addEventListener("keydown", e=>{
+    if(!playing) return;
+
+    velocity = -5.9;
+
+});
+
+document
+.addEventListener("keydown",e=>{
 
     if(e.code === "Space"){
 
-        e.preventDefault();
-
-        flap();
+        velocity = -5.9;
 
     }
 
 });
 
-function flap(){
-
-    if(!playing) return;
-
-    velocity = PHYSICS.jump;
-
-    character.style.transform =
-    "rotate(-16deg)";
-
-    playAudio(flapSound);
-
-    particles(
-        character.offsetLeft + 30,
-        y + 50
-    );
-
-}
-
-/* =========================
-   LOOP
-========================= */
-
-function loop(){
-
-    if(!playing) return;
-
-    updatePhysics();
-
-    updatePipes();
-
-    updateRewards();
-
-    collisions();
-
-    animation = requestAnimationFrame(loop);
-
-}
-
-/* =========================
-   UPDATE PLAYER
-========================= */
-
-function updatePhysics(){
-
-    velocity += PHYSICS.gravity;
-
-    if(velocity > PHYSICS.terminal){
-
-        velocity = PHYSICS.terminal;
-
-    }
-
-    y += velocity;
-
-    if(y < 0){
-
-        y = 0;
-        velocity = 0;
-
-    }
-
-    const groundY =
-    window.innerHeight -
-    95 -
-    character.clientHeight;
-
-    if(y >= groundY){
-
-        y = groundY;
-
-        endGame();
-
-    }
-
-    character.style.left = "22vw";
-    character.style.top = y + "px";
-
-    if(velocity > 1){
-
-        character.style.transform =
-        `rotate(${velocity * 3.5}deg)`;
-
-    }
-
-}
-
-/* =========================
+/* =======================================================
    PIPES
-========================= */
+======================================================= */
 
 function updatePipes(){
 
     const now = Date.now();
 
-    if(now - lastSpawn > PHYSICS.spawnRate){
+    if(now-lastSpawn > 2100){
 
         spawnPipe();
 
@@ -891,37 +1141,35 @@ function updatePipes(){
 
     }
 
-    pipes.forEach((pipe,index)=>{
+    pipes.forEach((p,i)=>{
 
-        pipe.x -= PHYSICS.speed;
+        p.x -= speed;
 
-        pipe.top.style.left =
-        pipe.x + "px";
+        p.top.style.left =
+        p.x+"px";
 
-        pipe.bottom.style.left =
-        pipe.x + "px";
+        p.bottom.style.left =
+        p.x+"px";
 
-        if(
-            !pipe.passed &&
-            pipe.x < window.innerWidth * .22
-        ){
+        if(!p.passed &&
+        p.x < window.innerWidth*.22){
 
-            pipe.passed = true;
+            p.passed = true;
 
             score++;
 
-            scoreText.innerText = score;
-
-            playAudio(pointSound);
+            document
+            .getElementById("score")
+            .innerText = score;
 
         }
 
-        if(pipe.x < -120){
+        if(p.x < -120){
 
-            pipe.top.remove();
-            pipe.bottom.remove();
+            p.top.remove();
+            p.bottom.remove();
 
-            pipes.splice(index,1);
+            pipes.splice(i,1);
 
         }
 
@@ -929,334 +1177,113 @@ function updatePipes(){
 
 }
 
-/* =========================
-   SPAWN PIPE
-========================= */
-
 function spawnPipe(){
 
-    difficulty += .13;
+    document
+    .getElementById("difficulty-fill")
+    .style.width =
+    Math.min(score*2,100)+"%";
 
-    if(difficulty > 10){
-
-        difficulty = 10;
-
-    }
-
-    difficultyFill.style.width =
-    (difficulty * 10) + "%";
-
-    const gap =
-    Math.max(
-        PHYSICS.minGap,
-        PHYSICS.gap - difficulty * 4
-    );
+    const gap = 280;
 
     const topHeight =
-    rand(
-        120,
-        window.innerHeight - gap - 260
-    );
+    rand(120,
+    window.innerHeight-gap-260);
 
     const bottomY =
     topHeight + gap;
 
     const bottomHeight =
-    window.innerHeight -
-    bottomY -
-    95;
+    window.innerHeight-bottomY-95;
 
-    const topPipe =
+    const top =
     document.createElement("div");
 
-    topPipe.className = "pipe";
+    top.className = "pipe";
 
-    topPipe.style.height =
-    topHeight + "px";
+    top.style.height =
+    topHeight+"px";
 
-    topPipe.style.left =
-    window.innerWidth + "px";
+    top.style.left =
+    window.innerWidth+"px";
 
-    topPipe.style.top = "0";
+    top.style.top = "0";
 
     const topInner =
     document.createElement("div");
 
-    topInner.className = "pipe-inner";
+    topInner.className =
+    "pipe-inner";
 
-    topPipe.appendChild(topInner);
+    top.appendChild(topInner);
 
-    game.appendChild(topPipe);
+    document
+    .getElementById("game")
+    .appendChild(top);
 
-    const bottomPipe =
+    const bottom =
     document.createElement("div");
 
-    bottomPipe.className = "pipe";
+    bottom.className = "pipe";
 
-    bottomPipe.style.height =
-    bottomHeight + "px";
+    bottom.style.height =
+    bottomHeight+"px";
 
-    bottomPipe.style.left =
-    window.innerWidth + "px";
+    bottom.style.left =
+    window.innerWidth+"px";
 
-    bottomPipe.style.top =
-    bottomY + "px";
+    bottom.style.top =
+    bottomY+"px";
 
     const bottomInner =
     document.createElement("div");
 
-    bottomInner.className = "pipe-inner";
+    bottomInner.className =
+    "pipe-inner";
 
-    bottomPipe.appendChild(bottomInner);
+    bottom.appendChild(bottomInner);
 
-    game.appendChild(bottomPipe);
+    document
+    .getElementById("game")
+    .appendChild(bottom);
 
     pipes.push({
 
         x:window.innerWidth,
-        top:topPipe,
-        bottom:bottomPipe,
+        top,
+        bottom,
         passed:false
 
     });
 
-    if(Math.random() > .35){
-
-        spawnReward(
-            window.innerWidth + 180,
-            topHeight + gap/2 - 30
-        );
-
-    }
-
 }
 
-/* =========================
-   REWARDS
-========================= */
-
-function spawnReward(xPos,yPos){
-
-    const reward =
-    document.createElement("div");
-
-    reward.className = "reward";
-
-    const isHeart = Math.random() > .5;
-
-    reward.style.backgroundImage =
-    isHeart
-    ?
-    "url('https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/Heart.png')"
-    :
-    "url('https://raw.githubusercontent.com/MACBRUH-OFC/-Simulator/refs/heads/main/Resources/Images/BrokenBeega.png')";
-
-    reward.style.left = xPos + "px";
-    reward.style.top = yPos + "px";
-
-    game.appendChild(reward);
-
-    rewards.push({
-
-        x:xPos,
-        y:yPos,
-        el:reward
-
-    });
-
-}
-
-function updateRewards(){
-
-    rewards.forEach((reward,index)=>{
-
-        reward.x -= PHYSICS.speed;
-
-        reward.el.style.left =
-        reward.x + "px";
-
-        if(rectHit(character,reward.el)){
-
-            score += 5;
-
-            scoreText.innerText = score;
-
-            particles(
-                reward.x + 20,
-                reward.y + 20
-            );
-
-            playAudio(heartSound);
-
-            reward.el.remove();
-
-            rewards.splice(index,1);
-
-        }
-
-        if(reward.x < -80){
-
-            reward.el.remove();
-
-            rewards.splice(index,1);
-
-        }
-
-    });
-
-}
-
-/* =========================
+/* =======================================================
    COLLISION
-========================= */
+======================================================= */
 
 function collisions(){
 
-    for(let pipe of pipes){
+    pipes.forEach(p=>{
 
-        if(
-            rectHit(character,pipe.top) ||
-            rectHit(character,pipe.bottom)
-        ){
+        if(hit(player,p.top) ||
+        hit(player,p.bottom)){
 
             endGame();
 
         }
 
-    }
+    });
 
 }
 
-/* =========================
-   END GAME
-========================= */
+function hit(a,b){
 
-function endGame(){
+    const r1 =
+    a.getBoundingClientRect();
 
-    if(!playing) return;
-
-    playing = false;
-
-    cancelAnimationFrame(animation);
-
-    playAudio(gameOverSound);
-
-    if(score > best){
-
-        best = score;
-
-        localStorage.setItem(
-            "darshan_best_score",
-            best
-        );
-
-    }
-
-    finalScoreText.innerText = score;
-
-    bestScoreText.innerText = best;
-
-    gameOverOverlay.style.display =
-    "flex";
-
-}
-
-/* =========================
-   AUDIO
-========================= */
-
-function playAudio(audio){
-
-    if(muted) return;
-
-    audio.currentTime = 0;
-
-    audio.play();
-
-}
-
-muteBtn.onclick = ()=>{
-
-    muted = !muted;
-
-    muteBtn.innerHTML =
-    muted
-    ?
-    '<i class="fas fa-volume-mute"></i>'
-    :
-    '<i class="fas fa-volume-up"></i>';
-
-};
-
-/* =========================
-   PARTICLES
-========================= */
-
-function particles(x,y){
-
-    for(let i=0;i<10;i++){
-
-        const p =
-        document.createElement("div");
-
-        p.className = "particle";
-
-        const size = rand(4,10);
-
-        p.style.width = size + "px";
-        p.style.height = size + "px";
-
-        p.style.left = x + "px";
-        p.style.top = y + "px";
-
-        p.style.background =
-        `rgba(255,255,255,.9)`;
-
-        game.appendChild(p);
-
-        let life = 30;
-
-        let vx = (Math.random()-.5)*5;
-        let vy = (Math.random()-.5)*5;
-
-        function move(){
-
-            if(life <= 0){
-
-                p.remove();
-
-                return;
-
-            }
-
-            life--;
-
-            x += vx;
-            y += vy;
-
-            p.style.left = x + "px";
-            p.style.top = y + "px";
-
-            p.style.opacity = life/30;
-
-            requestAnimationFrame(move);
-
-        }
-
-        move();
-
-    }
-
-}
-
-/* =========================
-   HITBOX
-========================= */
-
-function rectHit(a,b){
-
-    const r1 = a.getBoundingClientRect();
-    const r2 = b.getBoundingClientRect();
+    const r2 =
+    b.getBoundingClientRect();
 
     return !(
 
@@ -1269,15 +1296,86 @@ function rectHit(a,b){
 
 }
 
-/* =========================
+/* =======================================================
+   END GAME
+======================================================= */
+
+function endGame(){
+
+    if(!playing) return;
+
+    playing = false;
+
+    if(score > best){
+
+        best = score;
+
+        localStorage
+        .setItem("bestScore",best);
+
+    }
+
+    document
+    .getElementById("finalScore")
+    .innerText = score;
+
+    document
+    .getElementById("bestScore")
+    .innerText = best;
+
+    document
+    .getElementById("gameOverOverlay")
+    .style.display = "flex";
+
+}
+
+/* =======================================================
+   SETTINGS
+======================================================= */
+
+const settings =
+document.getElementById("settings-panel");
+
+document
+.getElementById("settingsBtn")
+.onclick = ()=>{
+
+    settings.style.display =
+    settings.style.display ===
+    "block"
+    ?
+    "none"
+    :
+    "block";
+
+};
+
+document
+.getElementById("gravityRange")
+.oninput = e=>{
+
+    gravity =
+    parseFloat(e.target.value);
+
+};
+
+document
+.getElementById("speedRange")
+.oninput = e=>{
+
+    speed =
+    parseFloat(e.target.value);
+
+};
+
+/* =======================================================
    RANDOM
-========================= */
+======================================================= */
 
 function rand(min,max){
 
     return Math.floor(
-        Math.random() * (max-min) + min
-    );
+    Math.random()*(max-min)+min);
 
 }
 
